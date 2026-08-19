@@ -415,8 +415,6 @@ section h2 {
     color: transparent;
 }
 
-/* ================= CONTACT ================= */
-
 .contact-box {
     padding: 60px;
     border-radius: 35px;
@@ -452,8 +450,6 @@ section h2 {
 .contact-btn:hover {
     transform: translateY(-4px);
 }
-
-/* ================= FOOTER ================= */
 
 footer {
     margin-top: 80px;
@@ -731,5 +727,31 @@ footer span {
 
   body {
     overflow-x: hidden;
+  }
+}
+@media (max-width: 768px) {
+    .hero h1 {
+    font-size: 58px;
+    line-height: 0.95;
+  }
+
+  .hero p {
+    font-size: 17px;
+  }
+
+  .hero-profile h2 {
+    font-size: 42px;
+  }
+
+  .hero-profile p {
+    font-size: 16px;
+  }
+
+  .eyebrow {
+    font-size: 16px;
+  }
+
+  .available {
+    font-size: 17px;
   }
 }
