@@ -14,9 +14,9 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 
 
-/* =========================
-   FIREBASE
-========================= */
+// =====================================
+// FIREBASE
+// =====================================
 
 const firebaseConfig = {
     apiKey: "AIzaSyAteF9GeUK8RyKohaiBy_K7dsLix4Z0Sho",
@@ -29,21 +29,23 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+
 const db = getFirestore(app);
 
 
-/* =========================
-   ADMIN PASSWORD
-========================= */
+// =====================================
+// ADMIN PASSWORD
+// =====================================
 
 const ADMIN_PASSWORD = "123456";
 
 
-/* =========================
-   ELEMENTS
-========================= */
+// =====================================
+// ELEMENTS
+// =====================================
 
 const openAdmin = document.getElementById("openAdmin");
+
 const loginModal = document.getElementById("loginModal");
 const adminModal = document.getElementById("adminModal");
 
@@ -55,51 +57,53 @@ const logoutBtn = document.getElementById("logout");
 
 const adminPassword = document.getElementById("adminPassword");
 
-const mobileMenu = document.getElementById("mobileMenu");
-const nav = document.getElementById("nav");
+const complaintForm =
+    document.getElementById("complaintForm");
 
-const complaintForm = document.getElementById("complaintForm");
-const complaintList = document.getElementById("complaintList");
-const complaintCount = document.getElementById("complaintCount");
+const complaintList =
+    document.getElementById("complaintList");
 
-const addProjectBtn = document.getElementById("addProject");
-const projectName = document.getElementById("projectName");
-const projectType = document.getElementById("projectType");
-const projectImage = document.getElementById("projectImage");
+const complaintCount =
+    document.getElementById("complaintCount");
 
-const portfolioList = document.getElementById("portfolioList");
-const adminProjectList = document.getElementById("adminProjectList");
+const addProjectBtn =
+    document.getElementById("addProject");
 
+const projectName =
+    document.getElementById("projectName");
 
-/* =========================
-   MOBILE MENU
-========================= */
+const projectType =
+    document.getElementById("projectType");
 
-if (mobileMenu && nav) {
+const projectImage =
+    document.getElementById("projectImage");
 
-    mobileMenu.addEventListener("click", () => {
-        nav.classList.toggle("active");
-    });
+const portfolioList =
+    document.getElementById("portfolioList");
 
-    nav.querySelectorAll("a").forEach(link => {
+const adminProjectList =
+    document.getElementById("adminProjectList");
 
-        link.addEventListener("click", () => {
-            nav.classList.remove("active");
-        });
+const mobileMenu =
+    document.getElementById("mobileMenu");
 
-    });
-}
+const nav =
+    document.getElementById("nav");
 
 
-/* =========================
-   MODAL
-========================= */
+// =====================================
+// MODAL
+// =====================================
 
 function openModal(modal) {
 
-    if (!modal) return;
+    if (!modal) {
+        console.error("Modal ёфт нашуд!");
+        return;
+    }
 
     modal.classList.add("active");
+
     document.body.style.overflow = "hidden";
 }
 
@@ -109,13 +113,14 @@ function closeModal(modal) {
     if (!modal) return;
 
     modal.classList.remove("active");
+
     document.body.style.overflow = "";
 }
 
 
-/* =========================
-   ADMIN LOGIN
-========================= */
+// =====================================
+// OPEN ADMIN
+// =====================================
 
 if (openAdmin) {
 
@@ -132,89 +137,110 @@ if (openAdmin) {
 }
 
 
+// =====================================
+// CLOSE LOGIN
+// =====================================
+
 if (closeLogin) {
 
     closeLogin.addEventListener("click", () => {
+
         closeModal(loginModal);
+
     });
 
 }
 
 
+// =====================================
+// CLOSE ADMIN
+// =====================================
+
+if (closeAdmin) {
+
+    closeAdmin.addEventListener("click", () => {
+
+        closeModal(adminModal);
+
+    });
+
+}
+
+
+// =====================================
+// LOGIN
+// =====================================
+
 if (loginBtn) {
 
-    loginBtn.addEventListener("click", () => {
+    loginBtn.addEventListener("click", async () => {
 
         const password =
             adminPassword.value.trim();
 
 
-        if (password === ADMIN_PASSWORD) {
-
-            sessionStorage.setItem(
-                "manuchekhr_admin",
-                "true"
-            );
-
-            adminPassword.value = "";
-
-            closeModal(loginModal);
-
-            openModal(adminModal);
-
-            loadAdminProjects();
-
-            loadComplaints();
-
-        } else {
+        if (password !== ADMIN_PASSWORD) {
 
             alert("Парол нодуруст аст ❌");
 
             adminPassword.value = "";
 
+            adminPassword.focus();
+
+            return;
         }
+
+
+        sessionStorage.setItem(
+            "adminLogin",
+            "true"
+        );
+
+
+        closeModal(loginModal);
+
+        openModal(adminModal);
+
+
+        await loadAdminProjects();
+
+        loadComplaints();
 
     });
 
 }
 
+
+// ENTER FOR PASSWORD
 
 if (adminPassword) {
 
-    adminPassword.addEventListener("keydown", event => {
+    adminPassword.addEventListener(
+        "keydown",
+        (event) => {
 
-        if (event.key === "Enter") {
-            loginBtn.click();
+            if (event.key === "Enter") {
+
+                loginBtn.click();
+
+            }
+
         }
-
-    });
-
-}
-
-
-/* =========================
-   CLOSE ADMIN
-========================= */
-
-if (closeAdmin) {
-
-    closeAdmin.addEventListener("click", () => {
-        closeModal(adminModal);
-    });
+    );
 
 }
 
 
-/* =========================
-   LOGOUT
-========================= */
+// =====================================
+// LOGOUT
+// =====================================
 
 if (logoutBtn) {
 
     logoutBtn.addEventListener("click", () => {
 
         sessionStorage.removeItem(
-            "manuchekhr_admin"
+            "adminLogin"
         );
 
         closeModal(adminModal);
@@ -224,18 +250,21 @@ if (logoutBtn) {
 }
 
 
-/* =========================
-   CLOSE MODAL OUTSIDE
-========================= */
+// =====================================
+// CLOSE WHEN CLICK OUTSIDE
+// =====================================
 
 [loginModal, adminModal].forEach(modal => {
 
     if (!modal) return;
 
-    modal.addEventListener("click", event => {
+
+    modal.addEventListener("click", (event) => {
 
         if (event.target === modal) {
+
             closeModal(modal);
+
         }
 
     });
@@ -243,284 +272,310 @@ if (logoutBtn) {
 });
 
 
-/* =========================
-   COMPLAINT FORM
-========================= */
+// =====================================
+// MOBILE MENU
+// =====================================
 
-if (complaintForm) {
+if (mobileMenu) {
 
-    complaintForm.addEventListener("submit", async event => {
+    mobileMenu.addEventListener("click", () => {
 
-        event.preventDefault();
-
-
-        const name =
-            document.getElementById("name").value.trim();
-
-        const phone =
-            document.getElementById("phone").value.trim();
-
-        const message =
-            document.getElementById("message").value.trim();
-
-
-        if (!name || !phone || !message) {
-
-            alert("Лутфан ҳамаи майдонҳоро пур кунед.");
-
-            return;
-        }
-
-
-        const button =
-            complaintForm.querySelector("button");
-
-
-        button.disabled = true;
-        button.textContent =
-            "Фиристода истодааст...";
-
-
-        try {
-
-            await addDoc(
-                collection(db, "complaints"),
-                {
-                    name: name,
-                    phone: phone,
-                    message: message,
-                    status: "new",
-                    createdAt: serverTimestamp()
-                }
-            );
-
-
-            complaintForm.reset();
-
-            alert(
-                "Паёми шумо фиристода шуд ✅"
-            );
-
-
-        } catch (error) {
-
-            console.error(
-                "Complaint error:",
-                error
-            );
-
-            alert(
-                "Хато шуд. Firebase Rules-ро санҷед."
-            );
-
-        } finally {
-
-            button.disabled = false;
-
-            button.textContent =
-                "Фиристодан →";
-
-        }
+        nav.classList.toggle("active");
 
     });
 
 }
 
 
-/* =========================
-   LOAD COMPLAINTS
-========================= */
+if (nav) {
 
-async function loadComplaints() {
+    nav.querySelectorAll("a").forEach(link => {
 
-    if (!complaintList) return;
+        link.addEventListener("click", () => {
+
+            nav.classList.remove("active");
+
+        });
+
+    });
+
+}
+
+
+// =====================================
+// ESCAPE HTML
+// =====================================
+
+function escapeHTML(value) {
+
+    return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+
+}
+
+
+// =====================================
+// IMAGE TO BASE64
+// =====================================
+
+function imageToBase64(file) {
+
+    return new Promise((resolve, reject) => {
+
+        const reader =
+            new FileReader();
+
+
+        reader.onload = () => {
+
+            resolve(reader.result);
+
+        };
+
+
+        reader.onerror = reject;
+
+
+        reader.readAsDataURL(file);
+
+    });
+
+}
+
+
+// =====================================
+// LOAD PORTFOLIO
+// =====================================
+
+async function loadProjects() {
+
+    if (!portfolioList) return;
 
 
     try {
 
-        const complaintsQuery = query(
-            collection(db, "complaints"),
-            orderBy("createdAt", "desc")
+        const snapshot =
+            await getDocs(
+                collection(db, "projects")
+            );
+
+
+        portfolioList.innerHTML = "";
+
+
+        if (snapshot.empty) {
+
+            portfolioList.innerHTML = `
+                <div class="empty-portfolio">
+                    Портфолио ҳоло холӣ аст.
+                </div>
+            `;
+
+            return;
+        }
+
+
+        snapshot.forEach(item => {
+
+            const data = item.data();
+
+
+            const card =
+                document.createElement("article");
+
+
+            card.className =
+                "portfolio-card";
+
+
+            card.innerHTML = `
+
+                ${
+                    data.image
+                    ?
+                    `
+                    <img
+                        src="${data.image}"
+                        alt="${escapeHTML(data.name)}"
+                    >
+                    `
+                    :
+                    `
+                    <div
+                        style="
+                        height:245px;
+                        display:flex;
+                        align-items:center;
+                        justify-content:center;
+                        background:#111;
+                        color:#a855f7;
+                        font-size:50px;
+                        font-weight:900;
+                        "
+                    >
+                        MB
+                    </div>
+                    `
+                }
+
+                <div class="portfolio-info">
+
+                    <small>
+                        ${escapeHTML(data.type)}
+                    </small>
+
+                    <h3>
+                        ${escapeHTML(data.name)}
+                    </h3>
+
+                </div>
+            `;
+
+
+            portfolioList.appendChild(card);
+
+        });
+
+
+    } catch (error) {
+
+        console.error(
+            "Portfolio error:",
+            error
         );
 
 
-        onSnapshot(
-            complaintsQuery,
-            snapshot => {
+        portfolioList.innerHTML = `
+            <div class="empty-portfolio">
+                Портфолиоро бор карда нашуд.
+            </div>
+        `;
 
-                complaintList.innerHTML = "";
+    }
 
-                if (complaintCount) {
-                    complaintCount.textContent =
-                        snapshot.size;
-                }
-
-
-                if (snapshot.empty) {
-
-                    complaintList.innerHTML = `
-                        <p class="empty-message">
-                            Ҳоло шикоят нест.
-                        </p>
-                    `;
-
-                    return;
-                }
+}
 
 
-                snapshot.forEach(item => {
+// =====================================
+// LOAD ADMIN PROJECTS
+// =====================================
 
-                    const data = item.data();
+async function loadAdminProjects() {
 
-                    const element =
-                        document.createElement("div");
-
-                    element.className =
-                        "complaint-item";
+    if (!adminProjectList) return;
 
 
-                    let date = "";
+    try {
 
-                    if (
-                        data.createdAt &&
-                        data.createdAt.toDate
-                    ) {
-
-                        date =
-                            data.createdAt
-                                .toDate()
-                                .toLocaleString("tg-TJ");
-
-                    }
+        const snapshot =
+            await getDocs(
+                collection(db, "projects")
+            );
 
 
-                    element.innerHTML = `
-
-                        <strong>
-                            ${escapeHTML(
-                                data.name || "Номаълум"
-                            )}
-                        </strong>
-
-                        <div class="complaint-phone">
-                            ${escapeHTML(
-                                data.phone || ""
-                            )}
-                        </div>
-
-                        <div class="complaint-message">
-                            ${escapeHTML(
-                                data.message || ""
-                            )}
-                        </div>
-
-                        ${
-                            date
-                            ? `
-                                <span class="complaint-date">
-                                    ${date}
-                                </span>
-                            `
-                            : ""
-                        }
-
-                        <button
-                            class="delete-complaint"
-                            type="button"
-                            data-id="${item.id}"
-                        >
-                            Нест кардан
-                        </button>
-
-                    `;
+        adminProjectList.innerHTML = "";
 
 
-                    complaintList.appendChild(element);
+        if (snapshot.empty) {
 
-                });
+            adminProjectList.innerHTML = `
+                <div class="empty-message">
+                    Ҳоло проект нест.
+                </div>
+            `;
+
+            return;
+        }
 
 
-                document
-                    .querySelectorAll(".delete-complaint")
-                    .forEach(button => {
+        snapshot.forEach(item => {
 
-                        button.addEventListener(
-                            "click",
-                            () => {
+            const data =
+                item.data();
 
-                                deleteComplaint(
-                                    button.dataset.id
-                                );
 
-                            }
+            const div =
+                document.createElement("div");
+
+
+            div.className =
+                "admin-item";
+
+
+            div.innerHTML = `
+
+                <div class="admin-item-info">
+
+                    <strong>
+                        ${escapeHTML(data.name)}
+                    </strong>
+
+                    <span>
+                        ${escapeHTML(data.type)}
+                    </span>
+
+                </div>
+
+                <button
+                    class="delete-project"
+                    data-id="${item.id}"
+                    type="button"
+                >
+                    Нест кардан
+                </button>
+
+            `;
+
+
+            adminProjectList.appendChild(div);
+
+        });
+
+
+        document
+            .querySelectorAll(".delete-project")
+            .forEach(button => {
+
+                button.addEventListener(
+                    "click",
+                    () => {
+
+                        deleteProject(
+                            button.dataset.id
                         );
 
-                    });
-
-            },
-            error => {
-
-                console.error(
-                    "Complaint listener error:",
-                    error
+                    }
                 );
 
-            }
-        );
+            });
 
 
     } catch (error) {
 
         console.error(
-            "Load complaints error:",
+            "Admin projects error:",
             error
         );
+
+
+        adminProjectList.innerHTML = `
+            <div class="empty-message">
+                Firebase Rules-ро санҷед.
+            </div>
+        `;
 
     }
 
 }
 
 
-/* =========================
-   DELETE COMPLAINT
-========================= */
-
-async function deleteComplaint(id) {
-
-    if (
-        !confirm(
-            "Ин шикоятро нест кардан мехоҳед?"
-        )
-    ) {
-        return;
-    }
-
-
-    try {
-
-        await deleteDoc(
-            doc(db, "complaints", id)
-        );
-
-    } catch (error) {
-
-        console.error(
-            "Delete complaint error:",
-            error
-        );
-
-        alert(
-            "Шикоятро нест карда нашуд."
-        );
-
-    }
-
-}
-
-
-/* =========================
-   ADD PROJECT
-========================= */
+// =====================================
+// ADD PROJECT
+// =====================================
 
 if (addProjectBtn) {
 
@@ -562,7 +617,7 @@ if (addProjectBtn) {
                 if (file) {
 
                     image =
-                        await fileToBase64(file);
+                        await imageToBase64(file);
 
                 }
 
@@ -570,16 +625,24 @@ if (addProjectBtn) {
                 await addDoc(
                     collection(db, "projects"),
                     {
+
                         name: name,
+
                         type: type,
+
                         image: image,
-                        createdAt: serverTimestamp()
+
+                        createdAt:
+                            serverTimestamp()
+
                     }
                 );
 
 
                 projectName.value = "";
+
                 projectType.value = "";
+
                 projectImage.value = "";
 
 
@@ -589,18 +652,20 @@ if (addProjectBtn) {
 
 
                 await loadProjects();
+
                 await loadAdminProjects();
 
 
             } catch (error) {
 
                 console.error(
-                    "Project error:",
+                    "Add project error:",
                     error
                 );
 
+
                 alert(
-                    "Проект илова нашуд."
+                    "Проект илова нашуд. Firebase Rules-ро санҷед."
                 );
 
             } finally {
@@ -618,235 +683,9 @@ if (addProjectBtn) {
 }
 
 
-/* =========================
-   LOAD PROJECTS
-========================= */
-
-async function loadProjects() {
-
-    if (!portfolioList) return;
-
-
-    try {
-
-        const snapshot =
-            await getDocs(
-                collection(db, "projects")
-            );
-
-
-        portfolioList.innerHTML = "";
-
-
-        if (snapshot.empty) {
-
-            portfolioList.innerHTML = `
-                <div class="empty-portfolio">
-                    <p>
-                        Портфолио ҳоло холӣ аст.
-                    </p>
-                </div>
-            `;
-
-            return;
-        }
-
-
-        snapshot.forEach(item => {
-
-            const project =
-                item.data();
-
-
-            const card =
-                document.createElement("article");
-
-            card.className =
-                "portfolio-card";
-
-
-            card.innerHTML = `
-
-                ${
-                    project.image
-                    ? `
-                        <img
-                            src="${escapeHTML(project.image)}"
-                            alt="${escapeHTML(
-                                project.name || "Project"
-                            )}"
-                        >
-                    `
-                    : `
-                        <div
-                            style="
-                                height:245px;
-                                display:flex;
-                                align-items:center;
-                                justify-content:center;
-                                background:
-                                linear-gradient(
-                                    135deg,
-                                    #17121f,
-                                    #09090c
-                                );
-                                color:#a855f7;
-                                font-size:50px;
-                                font-weight:900;
-                            "
-                        >
-                            MB
-                        </div>
-                    `
-                }
-
-                <div class="portfolio-info">
-
-                    <small>
-                        ${escapeHTML(
-                            project.type || "PROJECT"
-                        )}
-                    </small>
-
-                    <h3>
-                        ${escapeHTML(
-                            project.name || "Без ном"
-                        )}
-                    </h3>
-
-                </div>
-            `;
-
-
-            portfolioList.appendChild(card);
-
-        });
-
-
-    } catch (error) {
-
-        console.error(
-            "Load projects error:",
-            error
-        );
-
-    }
-
-}
-
-
-/* =========================
-   ADMIN PROJECTS
-========================= */
-
-async function loadAdminProjects() {
-
-    if (!adminProjectList) return;
-
-
-    try {
-
-        const snapshot =
-            await getDocs(
-                collection(db, "projects")
-            );
-
-
-        adminProjectList.innerHTML = "";
-
-
-        if (snapshot.empty) {
-
-            adminProjectList.innerHTML = `
-                <p class="empty-message">
-                    Ҳоло проект нест.
-                </p>
-            `;
-
-            return;
-        }
-
-
-        snapshot.forEach(item => {
-
-            const project =
-                item.data();
-
-
-            const element =
-                document.createElement("div");
-
-            element.className =
-                "admin-item";
-
-
-            element.innerHTML = `
-
-                <div class="admin-item-info">
-
-                    <strong>
-                        ${escapeHTML(
-                            project.name || "Без ном"
-                        )}
-                    </strong>
-
-                    <span>
-                        ${escapeHTML(
-                            project.type || ""
-                        )}
-                    </span>
-
-                </div>
-
-                <button
-                    class="delete-project"
-                    data-id="${item.id}"
-                    type="button"
-                >
-                    Нест кардан
-                </button>
-
-            `;
-
-
-            adminProjectList.appendChild(element);
-
-        });
-
-
-        adminProjectList
-            .querySelectorAll(".delete-project")
-            .forEach(button => {
-
-                button.addEventListener(
-                    "click",
-                    () => {
-
-                        deleteProject(
-                            button.dataset.id
-                        );
-
-                    }
-                );
-
-            });
-
-
-    } catch (error) {
-
-        console.error(
-            "Admin projects error:",
-            error
-        );
-
-    }
-
-}
-
-
-/* =========================
-   DELETE PROJECT
-========================= */
+// =====================================
+// DELETE PROJECT
+// =====================================
 
 async function deleteProject(id) {
 
@@ -867,6 +706,7 @@ async function deleteProject(id) {
 
 
         await loadProjects();
+
         await loadAdminProjects();
 
 
@@ -877,6 +717,7 @@ async function deleteProject(id) {
             error
         );
 
+
         alert(
             "Проектро нест карда нашуд."
         );
@@ -886,28 +727,119 @@ async function deleteProject(id) {
 }
 
 
-/* =========================
-   FILE TO BASE64
-========================= */
+// =====================================
+// COMPLAINT FORM
+// =====================================
 
-function fileToBase64(file) {
+if (complaintForm) {
 
-    return new Promise(
-        (resolve, reject) => {
+    complaintForm.addEventListener(
+        "submit",
+        async (event) => {
 
-            const reader =
-                new FileReader();
-
-
-            reader.onload = () => {
-                resolve(reader.result);
-            };
+            event.preventDefault();
 
 
-            reader.onerror = reject;
+            const name =
+                document
+                    .getElementById("name")
+                    .value
+                    .trim();
 
 
-            reader.readAsDataURL(file);
+            const phone =
+                document
+                    .getElementById("phone")
+                    .value
+                    .trim();
+
+
+            const message =
+                document
+                    .getElementById("message")
+                    .value
+                    .trim();
+
+
+            const button =
+                complaintForm.querySelector(
+                    "button"
+                );
+
+
+            if (
+                !name ||
+                !phone ||
+                !message
+            ) {
+
+                alert(
+                    "Лутфан ҳамаи майдонҳоро пур кунед."
+                );
+
+                return;
+            }
+
+
+            button.disabled = true;
+
+            button.textContent =
+                "Фиристода истодааст...";
+
+
+            try {
+
+                await addDoc(
+                    collection(
+                        db,
+                        "complaints"
+                    ),
+                    {
+
+                        name: name,
+
+                        phone: phone,
+
+                        message: message,
+
+                        status: "new",
+
+                        createdAt:
+                            serverTimestamp()
+
+                    }
+                );
+
+
+                complaintForm.reset();
+
+
+                alert(
+                    "Шикояти шумо фиристода шуд ✅"
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "Complaint error:",
+                    error
+                );
+
+
+                alert(
+                    "Хато шуд. Firebase Rules-ро санҷед."
+                );
+
+
+            } finally {
+
+                button.disabled = false;
+
+                button.textContent =
+                    "Фиристодан →";
+
+            }
 
         }
     );
@@ -915,24 +847,225 @@ function fileToBase64(file) {
 }
 
 
-/* =========================
-   ESCAPE HTML
-========================= */
+// =====================================
+// LOAD COMPLAINTS
+// =====================================
 
-function escapeHTML(value) {
+function loadComplaints() {
 
-    return String(value)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
+    if (!complaintList) return;
+
+
+    const complaintsQuery =
+        query(
+            collection(
+                db,
+                "complaints"
+            ),
+            orderBy(
+                "createdAt",
+                "desc"
+            )
+        );
+
+
+    onSnapshot(
+        complaintsQuery,
+        snapshot => {
+
+            complaintList.innerHTML = "";
+
+
+            if (complaintCount) {
+
+                complaintCount.textContent =
+                    snapshot.size;
+
+            }
+
+
+            if (snapshot.empty) {
+
+                complaintList.innerHTML = `
+                    <div class="empty-message">
+                        Ҳоло шикоят нест.
+                    </div>
+                `;
+
+                return;
+            }
+
+
+            snapshot.forEach(item => {
+
+                const data =
+                    item.data();
+
+
+                const div =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                div.className =
+                    "complaint-item";
+
+
+                let date = "";
+
+
+                if (
+                    data.createdAt &&
+                    data.createdAt.toDate
+                ) {
+
+                    date =
+                        data.createdAt
+                            .toDate()
+                            .toLocaleString(
+                                "tg-TJ"
+                            );
+
+                }
+
+
+                div.innerHTML = `
+
+                    <strong>
+                        ${escapeHTML(data.name)}
+                    </strong>
+
+                    <div class="complaint-phone">
+                        ${escapeHTML(data.phone)}
+                    </div>
+
+                    <div class="complaint-message">
+                        ${escapeHTML(data.message)}
+                    </div>
+
+                    ${
+                        date
+                        ?
+                        `
+                        <span class="complaint-date">
+                            ${date}
+                        </span>
+                        `
+                        :
+                        ""
+                    }
+
+                    <br>
+
+                    <button
+                        class="delete-complaint"
+                        data-id="${item.id}"
+                        type="button"
+                    >
+                        Нест кардан
+                    </button>
+
+                `;
+
+
+                complaintList.appendChild(div);
+
+            });
+
+
+            document
+                .querySelectorAll(
+                    ".delete-complaint"
+                )
+                .forEach(button => {
+
+                    button.addEventListener(
+                        "click",
+                        () => {
+
+                            deleteComplaint(
+                                button.dataset.id
+                            );
+
+                        }
+                    );
+
+                });
+
+        },
+
+
+        error => {
+
+            console.error(
+                "Complaint listener error:",
+                error
+            );
+
+
+            complaintList.innerHTML = `
+                <div class="empty-message">
+                    Firebase Rules иҷозаи хондани
+                    шикоятҳоро намедиҳад.
+                </div>
+            `;
+
+        }
+    );
 
 }
 
 
-/* =========================
-   START
-========================= */
+// =====================================
+// DELETE COMPLAINT
+// =====================================
+
+async function deleteComplaint(id) {
+
+    if (
+        !confirm(
+            "Ин шикоятро нест кардан мехоҳед?"
+        )
+    ) {
+        return;
+    }
+
+
+    try {
+
+        await deleteDoc(
+            doc(
+                db,
+                "complaints",
+                id
+            )
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Delete complaint error:",
+            error
+        );
+
+
+        alert(
+            "Шикоятро нест карда нашуд."
+        );
+
+    }
+
+}
+
+
+// =====================================
+// START
+// =====================================
 
 loadProjects();
+
+console.log(
+    "MANUCHEKHR WEBSITE READY ✅"
+);
