@@ -1,5 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+    /* =========================
+       ADMIN SETTINGS
+    ========================= */
+
     const PASSWORD = "5044";
 
     const openAdmin = document.getElementById("openAdmin");
@@ -52,7 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =========================
-       GET PROJECTS
+       PROJECT STORAGE
     ========================= */
 
     function getProjects() {
@@ -71,10 +75,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-
-    /* =========================
-       SAVE PROJECTS
-    ========================= */
 
     function saveProjects(projects) {
 
@@ -118,7 +118,9 @@ document.addEventListener("DOMContentLoaded", () => {
             fontWeight: "700",
             fontSize: "14px",
             boxShadow:
-                "0 15px 40px rgba(0,0,0,.4)"
+                "0 15px 40px rgba(0,0,0,.4)",
+            opacity: "1",
+            transition: ".3s"
         });
 
         document.body.appendChild(message);
@@ -126,7 +128,6 @@ document.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => {
 
             message.style.opacity = "0";
-            message.style.transition = ".3s";
 
             setTimeout(() => {
                 message.remove();
@@ -163,15 +164,15 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
 
-        projects.forEach(project => {
+        projects.forEach((project, index) => {
 
             const card =
                 document.createElement("div");
 
-            card.className = "service";
+            card.className = "service wow-card";
 
             card.innerHTML = `
-                <span>PROJECT</span>
+                <span>PROJECT ${String(index + 1).padStart(2, "0")}</span>
 
                 <h3>
                     ${escapeHTML(project.name)}
@@ -184,6 +185,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
             portfolioList.appendChild(card);
         });
+
+        activateAnimations();
     }
 
 
@@ -354,9 +357,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    /* =========================
-       ENTER = LOGIN
-    ========================= */
+    /* ENTER LOGIN */
 
     if (adminPassword) {
 
@@ -408,7 +409,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 const type =
                     projectType.value.trim();
 
-
                 if (!name || !type) {
 
                     showMessage(
@@ -418,19 +418,15 @@ document.addEventListener("DOMContentLoaded", () => {
                     return;
                 }
 
-
                 const projects =
                     getProjects();
-
 
                 projects.push({
                     name: name,
                     type: type
                 });
 
-
                 saveProjects(projects);
-
 
                 projectName.value = "";
                 projectType.value = "";
@@ -439,10 +435,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     projectImage.value = "";
                 }
 
-
                 renderAdminProjects();
                 renderPortfolio();
-
 
                 showMessage(
                     "Проект бомуваффақият илова шуд ✓"
@@ -476,7 +470,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =========================
-       CLOSE BY BACKGROUND
+       CLOSE MODAL BACKGROUND
     ========================= */
 
     [loginModal, adminModal]
@@ -565,7 +559,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =========================
-       HEADER SCROLL
+       HEADER SCROLL EFFECT
     ========================= */
 
     const header =
@@ -585,6 +579,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 header.style.boxShadow =
                     "0 15px 50px rgba(0,0,0,.45)";
 
+                header.style.transform =
+                    "translateY(-2px)";
+
             } else {
 
                 header.style.background =
@@ -592,10 +589,336 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 header.style.boxShadow =
                     "none";
+
+                header.style.transform =
+                    "translateY(0)";
             }
 
         }
     );
+
+
+    /* =================================================
+       🚀 WOW ANIMATION SYSTEM
+    ================================================= */
+
+
+    /* -------------------------
+       SCROLL REVEAL
+    ------------------------- */
+
+    function activateAnimations() {
+
+        const elements =
+            document.querySelectorAll(
+                ".section, .stats, .service, .stat, .about-card, .contact-section, .wow-card"
+            );
+
+        elements.forEach((element, index) => {
+
+            if (element.dataset.animationReady) {
+                return;
+            }
+
+            element.dataset.animationReady = "true";
+
+            element.style.opacity = "0";
+            element.style.transform =
+                "translateY(45px) scale(.98)";
+            element.style.filter = "blur(5px)";
+            element.style.transition =
+                `opacity .8s ease ${index * .04}s,
+                 transform .8s cubic-bezier(.16,1,.3,1) ${index * .04}s,
+                 filter .8s ease ${index * .04}s`;
+        });
+
+
+        const observer =
+            new IntersectionObserver(
+                entries => {
+
+                    entries.forEach(entry => {
+
+                        if (
+                            entry.isIntersecting
+                        ) {
+
+                            entry.target.style.opacity =
+                                "1";
+
+                            entry.target.style.transform =
+                                "translateY(0) scale(1)";
+
+                            entry.target.style.filter =
+                                "blur(0)";
+
+                            observer.unobserve(
+                                entry.target
+                            );
+                        }
+
+                    });
+
+                },
+                {
+                    threshold: .12
+                }
+            );
+
+
+        elements.forEach(element => {
+            observer.observe(element);
+        });
+    }
+
+
+    /* -------------------------
+       MOUSE GLOW
+    ------------------------- */
+
+    const glow =
+        document.createElement("div");
+
+    glow.className = "mouse-glow";
+
+    Object.assign(glow.style, {
+        position: "fixed",
+        width: "280px",
+        height: "280px",
+        borderRadius: "50%",
+        pointerEvents: "none",
+        zIndex: "0",
+        transform: "translate(-50%, -50%)",
+        background:
+            "radial-gradient(circle, rgba(168,85,247,.16), rgba(255,60,170,.06), transparent 70%)",
+        filter: "blur(15px)",
+        opacity: "0",
+        transition: "opacity .4s ease"
+    });
+
+    document.body.appendChild(glow);
+
+
+    document.addEventListener(
+        "mousemove",
+        event => {
+
+            glow.style.left =
+                event.clientX + "px";
+
+            glow.style.top =
+                event.clientY + "px";
+
+            glow.style.opacity = "1";
+        }
+    );
+
+
+    document.addEventListener(
+        "mouseleave",
+        () => {
+            glow.style.opacity = "0";
+        }
+    );
+
+
+    /* -------------------------
+       CARD 3D HOVER
+    ------------------------- */
+
+    document
+        .querySelectorAll(
+            ".service, .stat, .about-card"
+        )
+        .forEach(card => {
+
+            card.addEventListener(
+                "mousemove",
+                event => {
+
+                    const rect =
+                        card.getBoundingClientRect();
+
+                    const x =
+                        event.clientX - rect.left;
+
+                    const y =
+                        event.clientY - rect.top;
+
+                    const rotateX =
+                        ((y / rect.height) - .5) * -5;
+
+                    const rotateY =
+                        ((x / rect.width) - .5) * 5;
+
+                    card.style.transform =
+                        `perspective(800px)
+                         rotateX(${rotateX}deg)
+                         rotateY(${rotateY}deg)
+                         translateY(-5px)`;
+                }
+            );
+
+
+            card.addEventListener(
+                "mouseleave",
+                () => {
+
+                    card.style.transform =
+                        "perspective(800px) rotateX(0) rotateY(0) translateY(0)";
+                }
+            );
+        });
+
+
+    /* -------------------------
+       BUTTON RIPPLE
+    ------------------------- */
+
+    document
+        .querySelectorAll(
+            ".btn-primary, .btn-secondary, .header-btn"
+        )
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                event => {
+
+                    const ripple =
+                        document.createElement("span");
+
+                    Object.assign(ripple.style, {
+                        position: "absolute",
+                        width: "10px",
+                        height: "10px",
+                        borderRadius: "50%",
+                        background:
+                            "rgba(255,255,255,.5)",
+                        left:
+                            event.offsetX + "px",
+                        top:
+                            event.offsetY + "px",
+                        transform:
+                            "translate(-50%,-50%) scale(1)",
+                        pointerEvents: "none",
+                        animation:
+                            "wowRipple .6s ease-out forwards"
+                    });
+
+                    button.appendChild(ripple);
+
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 700);
+                }
+            );
+        });
+
+
+    /* -------------------------
+       DYNAMIC RIPPLE CSS
+    ------------------------- */
+
+    const style =
+        document.createElement("style");
+
+    style.textContent = `
+        @keyframes wowRipple {
+            from {
+                opacity: .8;
+                transform:
+                    translate(-50%,-50%)
+                    scale(1);
+            }
+
+            to {
+                opacity: 0;
+                transform:
+                    translate(-50%,-50%)
+                    scale(25);
+            }
+        }
+
+        .btn-primary,
+        .btn-secondary,
+        .header-btn {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mouse-glow {
+            mix-blend-mode: screen;
+        }
+    `;
+
+    document.head.appendChild(style);
+
+
+    /* -------------------------
+       HERO PARALLAX
+    ------------------------- */
+
+    const hero =
+        document.querySelector(".hero");
+
+    if (hero) {
+
+        document.addEventListener(
+            "mousemove",
+            event => {
+
+                if (window.innerWidth < 768) {
+                    return;
+                }
+
+                const x =
+                    (event.clientX /
+                        window.innerWidth - .5);
+
+                const y =
+                    (event.clientY /
+                        window.innerHeight - .5);
+
+                hero.style.transform =
+                    `translate(
+                        ${x * 5}px,
+                        ${y * 5}px
+                    )`;
+            }
+        );
+    }
+
+
+    /* -------------------------
+       NUMBER GLOW
+    ------------------------- */
+
+    document
+        .querySelectorAll(".stat strong")
+        .forEach(number => {
+
+            number.style.transition =
+                "text-shadow .4s ease";
+
+            number.addEventListener(
+                "mouseenter",
+                () => {
+
+                    number.style.textShadow =
+                        "0 0 15px #a855f7, 0 0 35px #ff3cac";
+                }
+            );
+
+            number.addEventListener(
+                "mouseleave",
+                () => {
+
+                    number.style.textShadow =
+                        "none";
+                }
+            );
+        });
 
 
     /* =========================
@@ -619,5 +942,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     renderPortfolio();
     renderAdminProjects();
+
+    setTimeout(() => {
+        activateAnimations();
+    }, 150);
 
 });
