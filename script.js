@@ -3,9 +3,7 @@
    Firebase + Portfolio + Admin + Complaints
    ========================================================= */
 
-import {
-    initializeApp
-} from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
 
 import {
     getFirestore,
@@ -21,10 +19,6 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 
 
-/* =========================================================
-   FIREBASE CONFIG
-   ========================================================= */
-
 const firebaseConfig = {
     apiKey: "AIzaSyAteF9GeUK8RyKohaiBy_K7dsLix4Z0Sho",
     authDomain: "manuchekhr-smm.firebaseapp.com",
@@ -33,6 +27,12 @@ const firebaseConfig = {
     messagingSenderId: "226231175635",
     appId: "1:226231175635:web:d9c1b6803e6cb129b44726",
     measurementId: "G-5M5SP1PPTY"
+};
+
+
+const app = initializeApp(firebaseConfig);
+
+const db = getFirestore(app);
 };
 
 
