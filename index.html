@@ -499,6 +499,202 @@
 </div>
 
 
+<!-- CONTACT -->
+
+<section class="contact reveal" id="contact">
+
+    <p class="contact-label">
+        ТАМОС БО МАН
+    </p>
+
+    <h2>
+        ЛОИҲА ДОРЕД?
+        <span>БИЁЕД СУҲБАТ КУНЕМ.</span>
+    </h2>
+
+    <p class="contact-description">
+        Агар барои бизнесатон SMM,
+        контент ё маркетинг лозим бошад,
+        ба ман нависед.
+    </p>
+
+    <div class="contact-buttons">
+
+        <a
+            href="https://wa.me/992504440101"
+            target="_blank"
+            class="button button-primary"
+        >
+            WhatsApp →
+        </a>
+
+        <a
+            href="tel:+992504440101"
+            class="phone"
+        >
+            +992 504 440 101
+        </a>
+
+    </div>
+
+
+    <div class="complaint-box">
+
+        <h3>Шикоят ё пешниҳод доред?</h3>
+
+        <p>
+            Мушкилот ё пешниҳоди худро ба мо фиристед.
+        </p>
+
+        <form id="complaintForm">
+
+            <input
+                id="name"
+                type="text"
+                placeholder="Номи шумо"
+                required
+            >
+
+            <input
+                id="phone"
+                type="tel"
+                placeholder="Рақами телефон"
+                required
+            >
+
+            <textarea
+                id="message"
+                placeholder="Шикоят ё пешниҳоди худро нависед..."
+                required
+            ></textarea>
+
+            <button
+                type="submit"
+                class="button button-primary"
+            >
+                Фиристодан →
+            </button>
+
+        </form>
+
+    </div>
+
+</section>
+
+
+</main>
+
+
+<!-- ADMIN BUTTON -->
+
+<button class="admin-button" id="openAdmin">
+    ⚙ Admin
+</button>
+
+
+<!-- LOGIN MODAL -->
+
+<div class="modal" id="loginModal">
+
+    <div class="modal-box">
+
+        <button class="modal-close" id="closeLogin">
+            ×
+        </button>
+
+        <p class="modal-label">
+            ADMIN PANEL
+        </p>
+
+        <h2>Воридшавӣ</h2>
+
+        <input
+            type="password"
+            id="adminPassword"
+            placeholder="Парол"
+        >
+
+        <button
+            class="admin-submit"
+            id="loginBtn"
+        >
+            Ворид шудан →
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ADMIN PANEL -->
+
+<div class="modal" id="adminModal">
+
+    <div class="modal-box">
+
+        <button class="modal-close" id="closeAdmin">
+            ×
+        </button>
+
+        <p class="modal-label">
+            ADMIN PANEL
+        </p>
+
+        <h2>Илова кардани проект</h2>
+
+        <label>Номи проект</label>
+
+        <input
+            type="text"
+            id="projectName"
+            placeholder="TAJ SPA"
+        >
+
+        <label>Хизмат</label>
+
+        <input
+            type="text"
+            id="projectType"
+            placeholder="SMM • Контент • Монтаж"
+        >
+
+        <label>Сурат</label>
+
+        <input
+            type="file"
+            id="projectImage"
+            accept="image/*"
+        >
+
+        <button
+            class="admin-submit"
+            id="addProject"
+        >
+            + Илова кардани проект
+        </button>
+
+        <div class="admin-projects">
+
+            <h3>Проектҳои ҳозира</h3>
+
+            <div id="adminProjectList"></div>
+
+        </div>
+
+        <button
+            class="logout-button"
+            id="logout"
+        >
+            Баромадан
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- FOOTER -->
+
 <footer>
 
     <div class="footer-logo">
