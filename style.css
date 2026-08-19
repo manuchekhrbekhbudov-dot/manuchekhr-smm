@@ -781,3 +781,58 @@ footer span {
         font-size: 17px;
     }
 }
+@media (max-width: 768px) {
+    .hero h1 {
+        font-size: 58px;
+        line-height: 0.95;
+    }
+
+    .hero p {
+        font-size: 17px;
+    }
+
+    .hero-profile h2 {
+        font-size: 42px;
+    }
+
+    .hero-profile p {
+        font-size: 16px;
+    }
+
+    .eyebrow {
+        font-size: 16px;
+    }
+
+    .available {
+        font-size: 17px;
+    }
+}
+/* ADMIN PANEL */
+.admin,
+.admin-panel,
+.admin-projects {
+    font-size: 18px;
+}
+
+.admin h2,
+.admin-panel h2 {
+    font-size: 32px;
+}
+
+.admin h3,
+.admin-panel h3 {
+    font-size: 24px;
+}
+
+.admin input,
+.admin-panel input,
+.admin button,
+.admin-panel button {
+    font-size: 18px;
+    padding: 10px 14px;
+}
+
+.admin label,
+.admin-panel label {
+    font-size: 18px;
+}
