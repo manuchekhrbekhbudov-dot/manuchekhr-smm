@@ -49,14 +49,52 @@ const db = getFirestore(app);
    ADMIN PASSWORD
    ========================================================= */
 
-/*
-   ⚠️ Ин password security-и ҳақиқӣ нест.
-   Барои версияи аввал истифода мебарем.
-   Баъд Firebase Authentication мегузорем.
-*/
-
 const ADMIN_PASSWORD = "123456";
 
+const openAdmin = document.getElementById("openAdmin");
+const loginModal = document.getElementById("loginModal");
+const adminModal = document.getElementById("adminModal");
+
+const closeLogin = document.getElementById("closeLogin");
+const closeAdmin = document.getElementById("closeAdmin");
+
+const loginBtn = document.getElementById("loginBtn");
+const adminPassword = document.getElementById("adminPassword");
+
+
+openAdmin.addEventListener("click", () => {
+    loginModal.classList.add("active");
+});
+
+
+closeLogin.addEventListener("click", () => {
+    loginModal.classList.remove("active");
+});
+
+
+loginBtn.addEventListener("click", () => {
+
+    const password = adminPassword.value.trim();
+
+    if (password === ADMIN_PASSWORD) {
+
+        loginModal.classList.remove("active");
+        adminModal.classList.add("active");
+
+        adminPassword.value = "";
+
+    } else {
+
+        alert("Парол нодуруст аст ❌");
+
+    }
+
+});
+
+
+closeAdmin.addEventListener("click", () => {
+    adminModal.classList.remove("active");
+});
 
 /* =========================================================
    ELEMENTS
