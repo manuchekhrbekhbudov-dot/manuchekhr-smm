@@ -836,3 +836,66 @@ footer span {
 .admin-panel label {
     font-size: 18px;
 }
+/* ADMIN PANEL — MOBILE */
+@media (max-width: 768px) {
+
+    .admin-modal {
+        padding: 20px 12px;
+        align-items: flex-start;
+        overflow-y: auto;
+    }
+
+    .admin-box.admin-large {
+        width: 100%;
+        max-width: 100%;
+        margin: 20px auto;
+        padding: 25px 18px;
+        box-sizing: border-box;
+    }
+
+    .admin-box h2 {
+        font-size: 30px;
+        line-height: 1.2;
+        margin-bottom: 20px;
+    }
+
+    .admin-box p {
+        font-size: 18px;
+    }
+
+    .admin-box label {
+        display: block;
+        font-size: 17px;
+        margin: 12px 0 6px;
+    }
+
+    .admin-box input {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        padding: 12px;
+        font-size: 16px;
+    }
+
+    .admin-box button {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        padding: 12px 16px;
+        font-size: 17px;
+        margin-top: 10px;
+    }
+
+    .admin-projects {
+        width: 100%;
+        margin-top: 25px;
+    }
+
+    .admin-projects h3 {
+        font-size: 26px;
+    }
+
+    .admin-projects p {
+        font-size: 17px;
+    }
+}
