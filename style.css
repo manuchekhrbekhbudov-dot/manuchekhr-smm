@@ -899,3 +899,53 @@ footer span {
         font-size: 17px;
     }
 }
+@media (max-width: 768px) {
+
+    .admin-modal {
+        position: fixed !important;
+        inset: 0 !important;
+        z-index: 9999 !important;
+        width: 100% !important;
+        height: 100% !important;
+        overflow-y: auto !important;
+        padding: 80px 15px 30px !important;
+        box-sizing: border-box !important;
+    }
+
+    .admin-box,
+    .admin-box.admin-large {
+        width: 100% !important;
+        max-width: 500px !important;
+        margin: 0 auto !important;
+        padding: 25px 18px !important;
+        box-sizing: border-box !important;
+    }
+
+    .admin-box input[type="text"],
+    .admin-box input[type="password"],
+    .admin-box input[type="file"] {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        font-size: 16px !important;
+    }
+
+    .admin-box button {
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        font-size: 16px !important;
+    }
+
+    .admin-projects {
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    .admin-projects h3 {
+        font-size: 26px !important;
+    }
+
+    .admin-projects p {
+        font-size: 17px !important;
+    }
+}
