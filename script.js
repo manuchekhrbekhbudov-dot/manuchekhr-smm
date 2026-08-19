@@ -1,12 +1,15 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    /* =========================
-       ADMIN SETTINGS
-    ========================= */
+    /* ================================
+       ELEMENTS
+    ================================= */
 
-    const PASSWORD = "5044";
+    const header = document.getElementById("header");
+    const mobileMenu = document.getElementById("mobileMenu");
+    const nav = document.getElementById("nav");
 
     const openAdmin = document.getElementById("openAdmin");
+
     const loginModal = document.getElementById("loginModal");
     const adminModal = document.getElementById("adminModal");
 
@@ -21,19 +24,25 @@ document.addEventListener("DOMContentLoaded", () => {
     const projectImage = document.getElementById("projectImage");
 
     const addProject = document.getElementById("addProject");
-    const adminProjectList =
-        document.getElementById("adminProjectList");
+    const logout = document.getElementById("logout");
 
     const portfolioList =
         document.getElementById("portfolioList");
 
-    const logout =
-        document.getElementById("logout");
+    const adminProjectList =
+        document.getElementById("adminProjectList");
 
 
-    /* =========================
+    /* ================================
+       ADMIN PASSWORD
+    ================================= */
+
+    const ADMIN_PASSWORD = "5044";
+
+
+    /* ================================
        DEFAULT PROJECTS
-    ========================= */
+    ================================= */
 
     const defaultProjects = [
         {
@@ -42,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
         },
         {
             name: "ILMSPACE",
-            type: "SMM • Контент • Монтаж"
+            type: "SMM • Marketing • Content"
         },
         {
             name: "COMPSTORE.TJ",
@@ -50,14 +59,14 @@ document.addEventListener("DOMContentLoaded", () => {
         },
         {
             name: "SMM PROJECT",
-            type: "Маркетинг • Reels • Дизайн"
+            type: "Branding • Reels • Marketing"
         }
     ];
 
 
-    /* =========================
-       PROJECT STORAGE
-    ========================= */
+    /* ================================
+       LOCAL STORAGE
+    ================================= */
 
     function getProjects() {
 
@@ -65,13 +74,17 @@ document.addEventListener("DOMContentLoaded", () => {
             localStorage.getItem("manuchekhrProjects");
 
         if (!saved) {
-            return defaultProjects;
+            return [...defaultProjects];
         }
 
         try {
+
             return JSON.parse(saved);
+
         } catch {
-            return defaultProjects;
+
+            return [...defaultProjects];
+
         }
     }
 
@@ -82,81 +95,138 @@ document.addEventListener("DOMContentLoaded", () => {
             "manuchekhrProjects",
             JSON.stringify(projects)
         );
+
     }
 
 
-    /* =========================
-       MESSAGE
-    ========================= */
+    /* ================================
+       SAFE HTML
+    ================================= */
+
+    function escapeHTML(value) {
+
+        return String(value)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+
+    }
+
+
+    /* ================================
+       LUXURY MESSAGE
+    ================================= */
 
     function showMessage(text) {
 
         const oldMessage =
-            document.querySelector(".js-message");
+            document.querySelector(".luxury-message");
 
         if (oldMessage) {
             oldMessage.remove();
         }
 
+
         const message =
             document.createElement("div");
 
-        message.className = "js-message";
+        message.className =
+            "luxury-message";
+
         message.textContent = text;
 
+
         Object.assign(message.style, {
+
             position: "fixed",
+
             top: "25px",
+
             left: "50%",
-            transform: "translateX(-50%)",
+
+            transform:
+                "translateX(-50%) translateY(-20px)",
+
             zIndex: "99999",
-            padding: "14px 22px",
+
+            padding: "13px 22px",
+
             borderRadius: "14px",
+
+            color: "#ffffff",
+
             background:
-                "linear-gradient(135deg,#8b5cf6,#ec4899)",
-            color: "#fff",
-            fontWeight: "700",
-            fontSize: "14px",
+                "linear-gradient(135deg,#9147ff,#ff3f9f)",
+
+            border:
+                "1px solid rgba(255,255,255,.2)",
+
             boxShadow:
-                "0 15px 40px rgba(0,0,0,.4)",
-            opacity: "1",
-            transition: ".3s"
+                "0 20px 60px rgba(0,0,0,.45)",
+
+            fontSize: "13px",
+
+            fontWeight: "600",
+
+            opacity: "0",
+
+            transition:
+                "all .45s cubic-bezier(.16,1,.3,1)"
+
         });
 
+
         document.body.appendChild(message);
+
+
+        requestAnimationFrame(() => {
+
+            message.style.opacity = "1";
+
+            message.style.transform =
+                "translateX(-50%) translateY(0)";
+
+        });
+
 
         setTimeout(() => {
 
             message.style.opacity = "0";
 
+            message.style.transform =
+                "translateX(-50%) translateY(-15px)";
+
             setTimeout(() => {
                 message.remove();
-            }, 300);
+            }, 450);
 
         }, 2200);
+
     }
 
 
-    /* =========================
-       PORTFOLIO
-    ========================= */
+    /* ================================
+       PORTFOLIO RENDER
+    ================================= */
 
     function renderPortfolio() {
 
         if (!portfolioList) return;
 
+
         const projects = getProjects();
 
+
         portfolioList.innerHTML = "";
+
 
         if (projects.length === 0) {
 
             portfolioList.innerHTML = `
-                <div class="service">
-                    <h3>Ҳоло проект нест</h3>
-                    <p>
-                        Аз Admin Panel проект илова кунед.
-                    </p>
+                <div class="portfolio-empty">
+                    Ҳоло проект нест.
                 </div>
             `;
 
@@ -167,12 +237,21 @@ document.addEventListener("DOMContentLoaded", () => {
         projects.forEach((project, index) => {
 
             const card =
-                document.createElement("div");
+                document.createElement("article");
 
-            card.className = "service wow-card";
+            card.className =
+                "portfolio-card reveal";
+
+
+            const number =
+                String(index + 1).padStart(2, "0");
+
 
             card.innerHTML = `
-                <span>PROJECT ${String(index + 1).padStart(2, "0")}</span>
+
+                <span>
+                    PROJECT ${number}
+                </span>
 
                 <h3>
                     ${escapeHTML(project.name)}
@@ -181,31 +260,41 @@ document.addEventListener("DOMContentLoaded", () => {
                 <p>
                     ${escapeHTML(project.type)}
                 </p>
+
             `;
 
+
             portfolioList.appendChild(card);
+
         });
 
-        activateAnimations();
+
+        observeReveal();
+
+        addCardTilt();
+
     }
 
 
-    /* =========================
-       ADMIN PROJECTS
-    ========================= */
+    /* ================================
+       ADMIN PROJECT LIST
+    ================================= */
 
     function renderAdminProjects() {
 
         if (!adminProjectList) return;
 
+
         const projects = getProjects();
 
+
         adminProjectList.innerHTML = "";
+
 
         if (projects.length === 0) {
 
             adminProjectList.innerHTML = `
-                <p>Ҳоло ягон проект нест.</p>
+                <p>Ҳоло проект нест.</p>
             `;
 
             return;
@@ -217,9 +306,12 @@ document.addEventListener("DOMContentLoaded", () => {
             const item =
                 document.createElement("div");
 
-            item.className = "admin-project";
+            item.className =
+                "admin-project";
+
 
             item.innerHTML = `
+
                 <h4>
                     ${escapeHTML(project.name)}
                 </h4>
@@ -229,13 +321,18 @@ document.addEventListener("DOMContentLoaded", () => {
                 </p>
 
                 <button
+                    type="button"
                     class="delete-project"
-                    data-index="${index}">
+                    data-index="${index}"
+                >
                     Нест кардан
                 </button>
+
             `;
 
+
             adminProjectList.appendChild(item);
+
         });
 
 
@@ -250,235 +347,247 @@ document.addEventListener("DOMContentLoaded", () => {
                         const index =
                             Number(button.dataset.index);
 
+
                         const projects =
                             getProjects();
 
+
                         projects.splice(index, 1);
+
 
                         saveProjects(projects);
 
+
                         renderAdminProjects();
+
                         renderPortfolio();
+
 
                         showMessage(
                             "Проект нест карда шуд ✓"
                         );
+
                     }
                 );
+
             });
+
     }
 
 
-    /* =========================
+    /* ================================
        OPEN ADMIN
-    ========================= */
+    ================================= */
 
-    if (openAdmin) {
+    openAdmin?.addEventListener(
+        "click",
+        () => {
 
-        openAdmin.addEventListener(
-            "click",
-            () => {
+            loginModal.classList.add("active");
 
-                loginModal.classList.add("active");
+            setTimeout(() => {
 
-                if (adminPassword) {
-                    adminPassword.focus();
-                }
+                adminPassword?.focus();
 
-            }
-        );
-    }
+            }, 200);
+
+        }
+    );
 
 
-    /* =========================
+    /* ================================
        CLOSE LOGIN
-    ========================= */
+    ================================= */
 
-    if (closeLogin) {
+    closeLogin?.addEventListener(
+        "click",
+        () => {
 
-        closeLogin.addEventListener(
-            "click",
-            () => {
+            loginModal.classList.remove("active");
 
-                loginModal.classList.remove("active");
+            adminPassword.value = "";
 
-                if (adminPassword) {
-                    adminPassword.value = "";
-                }
-
-            }
-        );
-    }
+        }
+    );
 
 
-    /* =========================
+    /* ================================
        LOGIN
-    ========================= */
+    ================================= */
 
-    if (loginBtn) {
+    function login() {
 
-        loginBtn.addEventListener(
-            "click",
-            () => {
+        const password =
+            adminPassword.value.trim();
 
-                const enteredPassword =
-                    adminPassword.value.trim();
 
-                if (
-                    enteredPassword === PASSWORD
-                ) {
+        if (password === ADMIN_PASSWORD) {
 
-                    loginModal.classList.remove(
-                        "active"
-                    );
+            loginModal.classList.remove("active");
 
-                    adminModal.classList.add(
-                        "active"
-                    );
+            adminModal.classList.add("active");
 
-                    renderAdminProjects();
+            renderAdminProjects();
 
-                    showMessage(
-                        "Хуш омадед ба Admin ✓"
-                    );
 
-                } else {
+            showMessage(
+                "Хуш омадед ба Admin ✓"
+            );
 
-                    showMessage(
-                        "Парол нодуруст аст!"
-                    );
 
-                    adminPassword.value = "";
-                    adminPassword.focus();
-                }
+        } else {
 
-            }
-        );
+            showMessage(
+                "Парол нодуруст аст!"
+            );
+
+
+            adminPassword.value = "";
+
+            adminPassword.focus();
+
+        }
+
     }
 
 
-    /* ENTER LOGIN */
+    loginBtn?.addEventListener(
+        "click",
+        login
+    );
 
-    if (adminPassword) {
 
-        adminPassword.addEventListener(
-            "keydown",
-            event => {
+    adminPassword?.addEventListener(
+        "keydown",
+        event => {
 
-                if (event.key === "Enter") {
-                    loginBtn.click();
-                }
+            if (event.key === "Enter") {
+
+                login();
 
             }
-        );
-    }
+
+        }
+    );
 
 
-    /* =========================
+    /* ================================
        CLOSE ADMIN
-    ========================= */
+    ================================= */
 
-    if (closeAdmin) {
+    closeAdmin?.addEventListener(
+        "click",
+        () => {
 
-        closeAdmin.addEventListener(
-            "click",
-            () => {
+            adminModal.classList.remove("active");
 
-                adminModal.classList.remove(
-                    "active"
-                );
-
-            }
-        );
-    }
+        }
+    );
 
 
-    /* =========================
+    /* ================================
        ADD PROJECT
-    ========================= */
+    ================================= */
 
-    if (addProject) {
+    addProject?.addEventListener(
+        "click",
+        () => {
 
-        addProject.addEventListener(
-            "click",
-            () => {
+            const name =
+                projectName.value.trim();
 
-                const name =
-                    projectName.value.trim();
+            const type =
+                projectType.value.trim();
 
-                const type =
-                    projectType.value.trim();
 
-                if (!name || !type) {
-
-                    showMessage(
-                        "Номи проект ва хизматро пур кун!"
-                    );
-
-                    return;
-                }
-
-                const projects =
-                    getProjects();
-
-                projects.push({
-                    name: name,
-                    type: type
-                });
-
-                saveProjects(projects);
-
-                projectName.value = "";
-                projectType.value = "";
-
-                if (projectImage) {
-                    projectImage.value = "";
-                }
-
-                renderAdminProjects();
-                renderPortfolio();
+            if (!name) {
 
                 showMessage(
-                    "Проект бомуваффақият илова шуд ✓"
+                    "Номи проектро навис!"
                 );
+
+                projectName.focus();
+
+                return;
             }
-        );
-    }
 
 
-    /* =========================
+            if (!type) {
+
+                showMessage(
+                    "Хизматро навис!"
+                );
+
+                projectType.focus();
+
+                return;
+            }
+
+
+            const projects =
+                getProjects();
+
+
+            projects.push({
+
+                name: name,
+
+                type: type
+
+            });
+
+
+            saveProjects(projects);
+
+
+            projectName.value = "";
+
+            projectType.value = "";
+
+            if (projectImage) {
+                projectImage.value = "";
+            }
+
+
+            renderAdminProjects();
+
+            renderPortfolio();
+
+
+            showMessage(
+                "Проект бо муваффақият илова шуд ✓"
+            );
+
+        }
+    );
+
+
+    /* ================================
        LOGOUT
-    ========================= */
+    ================================= */
 
-    if (logout) {
+    logout?.addEventListener(
+        "click",
+        () => {
 
-        logout.addEventListener(
-            "click",
-            () => {
+            adminModal.classList.remove("active");
 
-                adminModal.classList.remove(
-                    "active"
-                );
+            showMessage(
+                "Аз Admin баромадед"
+            );
 
-                showMessage(
-                    "Аз Admin баромадед"
-                );
-
-            }
-        );
-    }
+        }
+    );
 
 
-    /* =========================
-       CLOSE MODAL BACKGROUND
-    ========================= */
+    /* ================================
+       CLOSE MODAL ON BACKDROP
+    ================================= */
 
     [loginModal, adminModal]
         .forEach(modal => {
 
-            if (!modal) return;
-
-            modal.addEventListener(
+            modal?.addEventListener(
                 "click",
                 event => {
 
@@ -494,12 +603,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 }
             );
+
         });
 
 
-    /* =========================
-       ESCAPE
-    ========================= */
+    /* ================================
+       ESCAPE KEY
+    ================================= */
 
     document.addEventListener(
         "keydown",
@@ -507,444 +617,611 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (event.key === "Escape") {
 
-                if (loginModal) {
-                    loginModal.classList.remove(
-                        "active"
-                    );
-                }
+                loginModal?.classList.remove(
+                    "active"
+                );
 
-                if (adminModal) {
-                    adminModal.classList.remove(
-                        "active"
-                    );
-                }
+                adminModal?.classList.remove(
+                    "active"
+                );
 
             }
+
         }
     );
 
 
-    /* =========================
-       SMOOTH SCROLL
-    ========================= */
-
-    document
-        .querySelectorAll('a[href^="#"]')
-        .forEach(link => {
-
-            link.addEventListener(
-                "click",
-                event => {
-
-                    const id =
-                        link.getAttribute("href");
-
-                    const target =
-                        document.querySelector(id);
-
-                    if (target) {
-
-                        event.preventDefault();
-
-                        target.scrollIntoView({
-                            behavior: "smooth",
-                            block: "start"
-                        });
-
-                    }
-
-                }
-            );
-        });
-
-
-    /* =========================
+    /* ================================
        HEADER SCROLL EFFECT
-    ========================= */
+    ================================= */
 
-    const header =
-        document.querySelector("header");
+    function updateHeader() {
 
-    window.addEventListener(
-        "scroll",
-        () => {
+        if (!header) return;
 
-            if (!header) return;
 
-            if (window.scrollY > 40) {
+        if (window.scrollY > 40) {
 
-                header.style.background =
-                    "rgba(8,6,15,.92)";
+            header.classList.add(
+                "scrolled"
+            );
 
-                header.style.boxShadow =
-                    "0 15px 50px rgba(0,0,0,.45)";
+        } else {
 
-                header.style.transform =
-                    "translateY(-2px)";
-
-            } else {
-
-                header.style.background =
-                    "rgba(18,14,29,.78)";
-
-                header.style.boxShadow =
-                    "none";
-
-                header.style.transform =
-                    "translateY(0)";
-            }
+            header.classList.remove(
+                "scrolled"
+            );
 
         }
-    );
 
-
-    /* =================================================
-       🚀 WOW ANIMATION SYSTEM
-    ================================================= */
-
-
-    /* -------------------------
-       SCROLL REVEAL
-    ------------------------- */
-
-    function activateAnimations() {
-
-        const elements =
-            document.querySelectorAll(
-                ".section, .stats, .service, .stat, .about-card, .contact-section, .wow-card"
-            );
-
-        elements.forEach((element, index) => {
-
-            if (element.dataset.animationReady) {
-                return;
-            }
-
-            element.dataset.animationReady = "true";
-
-            element.style.opacity = "0";
-            element.style.transform =
-                "translateY(45px) scale(.98)";
-            element.style.filter = "blur(5px)";
-            element.style.transition =
-                `opacity .8s ease ${index * .04}s,
-                 transform .8s cubic-bezier(.16,1,.3,1) ${index * .04}s,
-                 filter .8s ease ${index * .04}s`;
-        });
-
-
-        const observer =
-            new IntersectionObserver(
-                entries => {
-
-                    entries.forEach(entry => {
-
-                        if (
-                            entry.isIntersecting
-                        ) {
-
-                            entry.target.style.opacity =
-                                "1";
-
-                            entry.target.style.transform =
-                                "translateY(0) scale(1)";
-
-                            entry.target.style.filter =
-                                "blur(0)";
-
-                            observer.unobserve(
-                                entry.target
-                            );
-                        }
-
-                    });
-
-                },
-                {
-                    threshold: .12
-                }
-            );
-
-
-        elements.forEach(element => {
-            observer.observe(element);
-        });
     }
 
 
-    /* -------------------------
-       MOUSE GLOW
-    ------------------------- */
+    window.addEventListener(
+        "scroll",
+        updateHeader,
+        { passive: true }
+    );
 
-    const glow =
+
+    updateHeader();
+
+
+    /* ================================
+       SCROLL REVEAL
+    ================================= */
+
+    let revealObserver = null;
+
+
+    function observeReveal() {
+
+        const elements =
+            document.querySelectorAll(
+                ".reveal:not(.visible)"
+            );
+
+
+        if (
+            !("IntersectionObserver" in window)
+        ) {
+
+            elements.forEach(element => {
+
+                element.classList.add(
+                    "visible"
+                );
+
+            });
+
+            return;
+        }
+
+
+        if (!revealObserver) {
+
+            revealObserver =
+                new IntersectionObserver(
+                    entries => {
+
+                        entries.forEach(
+                            entry => {
+
+                                if (
+                                    entry.isIntersecting
+                                ) {
+
+                                    entry.target.classList.add(
+                                        "visible"
+                                    );
+
+                                    revealObserver.unobserve(
+                                        entry.target
+                                    );
+
+                                }
+
+                            }
+                        );
+
+                    },
+                    {
+                        threshold: .12,
+
+                        rootMargin:
+                            "0px 0px -50px 0px"
+                    }
+                );
+
+        }
+
+
+        elements.forEach(element => {
+
+            revealObserver.observe(
+                element
+            );
+
+        });
+
+    }
+
+
+    /* ================================
+       3D CARD TILT
+    ================================= */
+
+    function addCardTilt() {
+
+        const cards =
+            document.querySelectorAll(
+                ".service-card, .portfolio-card, .stat-card"
+            );
+
+
+        cards.forEach(card => {
+
+            if (
+                card.dataset.tiltReady
+            ) return;
+
+
+            card.dataset.tiltReady = "true";
+
+
+            card.addEventListener(
+                "mousemove",
+                event => {
+
+                    if (
+                        window.innerWidth < 800
+                    ) return;
+
+
+                    const rect =
+                        card.getBoundingClientRect();
+
+
+                    const x =
+                        event.clientX -
+                        rect.left;
+
+
+                    const y =
+                        event.clientY -
+                        rect.top;
+
+
+                    const centerX =
+                        rect.width / 2;
+
+
+                    const centerY =
+                        rect.height / 2;
+
+
+                    const rotateX =
+                        ((y - centerY) /
+                        centerY) * -3;
+
+
+                    const rotateY =
+                        ((x - centerX) /
+                        centerX) * 3;
+
+
+                    card.style.transform =
+                        `perspective(900px)
+                         rotateX(${rotateX}deg)
+                         rotateY(${rotateY}deg)
+                         translateY(-8px)`;
+
+                }
+            );
+
+
+            card.addEventListener(
+                "mouseleave",
+                () => {
+
+                    card.style.transform = "";
+
+                }
+            );
+
+        });
+
+    }
+
+
+    /* ================================
+       MOUSE LIGHT
+    ================================= */
+
+    const mouseLight =
         document.createElement("div");
 
-    glow.className = "mouse-glow";
 
-    Object.assign(glow.style, {
-        position: "fixed",
-        width: "280px",
-        height: "280px",
-        borderRadius: "50%",
-        pointerEvents: "none",
-        zIndex: "0",
-        transform: "translate(-50%, -50%)",
-        background:
-            "radial-gradient(circle, rgba(168,85,247,.16), rgba(255,60,170,.06), transparent 70%)",
-        filter: "blur(15px)",
-        opacity: "0",
-        transition: "opacity .4s ease"
-    });
+    mouseLight.className =
+        "mouse-light";
 
-    document.body.appendChild(glow);
+
+    Object.assign(
+        mouseLight.style,
+        {
+
+            position: "fixed",
+
+            width: "280px",
+
+            height: "280px",
+
+            borderRadius: "50%",
+
+            pointerEvents: "none",
+
+            zIndex: "-2",
+
+            background:
+                "radial-gradient(circle, rgba(168,85,247,.10), transparent 70%)",
+
+            filter: "blur(12px)",
+
+            transform:
+                "translate(-50%,-50%)",
+
+            opacity: "0",
+
+            transition:
+                "opacity .4s ease"
+
+        }
+    );
+
+
+    document.body.appendChild(
+        mouseLight
+    );
+
+
+    let mouseX = 0;
+    let mouseY = 0;
+
+    let lightX = 0;
+    let lightY = 0;
 
 
     document.addEventListener(
         "mousemove",
         event => {
 
-            glow.style.left =
-                event.clientX + "px";
+            mouseX = event.clientX;
 
-            glow.style.top =
-                event.clientY + "px";
+            mouseY = event.clientY;
 
-            glow.style.opacity = "1";
+            mouseLight.style.opacity =
+                "1";
+
         }
     );
+
+
+    function animateMouseLight() {
+
+        lightX +=
+            (mouseX - lightX) * .08;
+
+        lightY +=
+            (mouseY - lightY) * .08;
+
+
+        mouseLight.style.left =
+            `${lightX}px`;
+
+        mouseLight.style.top =
+            `${lightY}px`;
+
+
+        requestAnimationFrame(
+            animateMouseLight
+        );
+
+    }
+
+
+    animateMouseLight();
+
+
+    /* ================================
+       MOBILE MENU
+    ================================= */
+
+    mobileMenu?.addEventListener(
+        "click",
+        () => {
+
+            const isOpen =
+                nav.classList.contains(
+                    "mobile-open"
+                );
+
+
+            if (isOpen) {
+
+                nav.classList.remove(
+                    "mobile-open"
+                );
+
+                nav.style.display = "";
+
+
+            } else {
+
+                nav.classList.add(
+                    "mobile-open"
+                );
+
+                nav.style.display = "flex";
+
+                nav.style.position =
+                    "absolute";
+
+                nav.style.top =
+                    "68px";
+
+                nav.style.left =
+                    "0";
+
+                nav.style.right =
+                    "0";
+
+                nav.style.padding =
+                    "20px";
+
+                nav.style.flexDirection =
+                    "column";
+
+                nav.style.gap =
+                    "20px";
+
+                nav.style.background =
+                    "rgba(9,6,15,.96)";
+
+                nav.style.border =
+                    "1px solid rgba(255,255,255,.1)";
+
+                nav.style.borderRadius =
+                    "16px";
+
+                nav.style.backdropFilter =
+                    "blur(20px)";
+
+            }
+
+        }
+    );
+
+
+    /* ================================
+       CLOSE MOBILE MENU
+    ================================= */
+
+    document
+        .querySelectorAll(".nav a")
+        .forEach(link => {
+
+            link.addEventListener(
+                "click",
+                () => {
+
+                    if (
+                        window.innerWidth <= 700
+                    ) {
+
+                        nav.classList.remove(
+                            "mobile-open"
+                        );
+
+                        nav.style.display = "";
+
+                    }
+
+                }
+            );
+
+        });
+
+
+    /* ================================
+       ACTIVE NAV
+    ================================= */
+
+    const sections =
+        document.querySelectorAll(
+            "main section[id]"
+        );
+
+    const navLinks =
+        document.querySelectorAll(
+            ".nav a"
+        );
+
+
+    function updateActiveNav() {
+
+        let current = "";
+
+
+        sections.forEach(section => {
+
+            const top =
+                section.offsetTop - 180;
+
+
+            if (
+                window.scrollY >= top
+            ) {
+
+                current =
+                    section.id;
+
+            }
+
+        });
+
+
+        navLinks.forEach(link => {
+
+            link.classList.remove(
+                "active"
+            );
+
+
+            const href =
+                link.getAttribute("href");
+
+
+            if (
+                href === `#${current}`
+            ) {
+
+                link.classList.add(
+                    "active"
+                );
+
+            }
+
+        });
+
+    }
+
+
+    window.addEventListener(
+        "scroll",
+        updateActiveNav,
+        { passive: true }
+    );
+
+
+    /* ================================
+       PARALLAX PROFILE
+    ================================= */
+
+    const heroVisual =
+        document.querySelector(
+            ".hero-visual"
+        );
 
 
     document.addEventListener(
-        "mouseleave",
-        () => {
-            glow.style.opacity = "0";
+        "mousemove",
+        event => {
+
+            if (
+                !heroVisual ||
+                window.innerWidth < 900
+            ) return;
+
+
+            const x =
+                (event.clientX /
+                window.innerWidth - .5);
+
+
+            const y =
+                (event.clientY /
+                window.innerHeight - .5);
+
+
+            heroVisual.style.transform =
+                `translate(${x * 12}px,
+                 ${y * 12}px)`;
+
         }
     );
 
 
-    /* -------------------------
-       CARD 3D HOVER
-    ------------------------- */
+    /* ================================
+       IMAGE PREVIEW
+    ================================= */
 
-    document
-        .querySelectorAll(
-            ".service, .stat, .about-card"
-        )
-        .forEach(card => {
+    projectImage?.addEventListener(
+        "change",
+        () => {
 
-            card.addEventListener(
-                "mousemove",
-                event => {
-
-                    const rect =
-                        card.getBoundingClientRect();
-
-                    const x =
-                        event.clientX - rect.left;
-
-                    const y =
-                        event.clientY - rect.top;
-
-                    const rotateX =
-                        ((y / rect.height) - .5) * -5;
-
-                    const rotateY =
-                        ((x / rect.width) - .5) * 5;
-
-                    card.style.transform =
-                        `perspective(800px)
-                         rotateX(${rotateX}deg)
-                         rotateY(${rotateY}deg)
-                         translateY(-5px)`;
-                }
-            );
+            const file =
+                projectImage.files[0];
 
 
-            card.addEventListener(
-                "mouseleave",
-                () => {
-
-                    card.style.transform =
-                        "perspective(800px) rotateX(0) rotateY(0) translateY(0)";
-                }
-            );
-        });
+            if (!file) return;
 
 
-    /* -------------------------
-       BUTTON RIPPLE
-    ------------------------- */
+            if (
+                !file.type.startsWith(
+                    "image/"
+                )
+            ) {
 
-    document
-        .querySelectorAll(
-            ".btn-primary, .btn-secondary, .header-btn"
-        )
-        .forEach(button => {
+                showMessage(
+                    "Фақат сурат интихоб кун!"
+                );
 
-            button.addEventListener(
-                "click",
-                event => {
+                projectImage.value = "";
 
-                    const ripple =
-                        document.createElement("span");
-
-                    Object.assign(ripple.style, {
-                        position: "absolute",
-                        width: "10px",
-                        height: "10px",
-                        borderRadius: "50%",
-                        background:
-                            "rgba(255,255,255,.5)",
-                        left:
-                            event.offsetX + "px",
-                        top:
-                            event.offsetY + "px",
-                        transform:
-                            "translate(-50%,-50%) scale(1)",
-                        pointerEvents: "none",
-                        animation:
-                            "wowRipple .6s ease-out forwards"
-                    });
-
-                    button.appendChild(ripple);
-
-                    setTimeout(() => {
-                        ripple.remove();
-                    }, 700);
-                }
-            );
-        });
-
-
-    /* -------------------------
-       DYNAMIC RIPPLE CSS
-    ------------------------- */
-
-    const style =
-        document.createElement("style");
-
-    style.textContent = `
-        @keyframes wowRipple {
-            from {
-                opacity: .8;
-                transform:
-                    translate(-50%,-50%)
-                    scale(1);
+                return;
             }
 
-            to {
-                opacity: 0;
-                transform:
-                    translate(-50%,-50%)
-                    scale(25);
+
+            if (
+                file.size > 5 * 1024 * 1024
+            ) {
+
+                showMessage(
+                    "Сурат бояд аз 5MB кам бошад!"
+                );
+
+                projectImage.value = "";
+
+                return;
             }
-        }
-
-        .btn-primary,
-        .btn-secondary,
-        .header-btn {
-            position: relative;
-            overflow: hidden;
-        }
-
-        .mouse-glow {
-            mix-blend-mode: screen;
-        }
-    `;
-
-    document.head.appendChild(style);
 
 
-    /* -------------------------
-       HERO PARALLAX
-    ------------------------- */
-
-    const hero =
-        document.querySelector(".hero");
-
-    if (hero) {
-
-        document.addEventListener(
-            "mousemove",
-            event => {
-
-                if (window.innerWidth < 768) {
-                    return;
-                }
-
-                const x =
-                    (event.clientX /
-                        window.innerWidth - .5);
-
-                const y =
-                    (event.clientY /
-                        window.innerHeight - .5);
-
-                hero.style.transform =
-                    `translate(
-                        ${x * 5}px,
-                        ${y * 5}px
-                    )`;
-            }
-        );
-    }
-
-
-    /* -------------------------
-       NUMBER GLOW
-    ------------------------- */
-
-    document
-        .querySelectorAll(".stat strong")
-        .forEach(number => {
-
-            number.style.transition =
-                "text-shadow .4s ease";
-
-            number.addEventListener(
-                "mouseenter",
-                () => {
-
-                    number.style.textShadow =
-                        "0 0 15px #a855f7, 0 0 35px #ff3cac";
-                }
+            showMessage(
+                "Сурат интихоб шуд ✓"
             );
 
-            number.addEventListener(
-                "mouseleave",
-                () => {
-
-                    number.style.textShadow =
-                        "none";
-                }
-            );
-        });
+        }
+    );
 
 
-    /* =========================
-       SECURITY
-    ========================= */
-
-    function escapeHTML(text) {
-
-        return String(text)
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
-    }
-
-
-    /* =========================
-       START
-    ========================= */
+    /* ================================
+       INITIALIZE
+    ================================= */
 
     renderPortfolio();
+
     renderAdminProjects();
 
-    setTimeout(() => {
-        activateAnimations();
-    }, 150);
+    observeReveal();
+
+    addCardTilt();
+
+    updateActiveNav();
+
+
+    /* ================================
+       PAGE LOADED
+    ================================= */
+
+    window.addEventListener(
+        "load",
+        () => {
+
+            document.body.classList.add(
+                "page-loaded"
+            );
+
+        }
+    );
 
 });
