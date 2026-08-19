@@ -755,3 +755,29 @@ footer span {
     font-size: 17px;
   }
 }
+@media (max-width: 768px) {
+    .hero h1 {
+        font-size: 58px;
+        line-height: 0.95;
+    }
+
+    .hero p {
+        font-size: 17px;
+    }
+
+    .hero-profile h2 {
+        font-size: 42px;
+    }
+
+    .hero-profile p {
+        font-size: 16px;
+    }
+
+    .eyebrow {
+        font-size: 16px;
+    }
+
+    .available {
+        font-size: 17px;
+    }
+}
