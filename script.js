@@ -962,5 +962,497 @@ ${message}`;
     console.log(
         "MANUCHEKHR SMM — Website loaded successfully."
     );
+/* =========================================================
+   MANUCHEKHR — ADMIN LIVE DASHBOARD
+   ҲАМАИ ДАРХОСТҲО
+   ХОНДА НАШУДА
+   ПРОЕКТҲО
+   ПАЁМҲОИ КЛИЕНТҲО
+========================================================= */
 
+(() => {
+
+    const totalEl =
+        document.getElementById("complaintCount");
+
+    const unreadEl =
+        document.getElementById("unreadCount");
+
+    const projectsEl =
+        document.getElementById("projectCount");
+
+    const listEl =
+        document.getElementById("complaintList");
+
+
+    if (!totalEl || !listEl) {
+        return;
+    }
+
+
+    /* =====================================================
+       READ STATUS — LOCAL ADMIN
+    ===================================================== */
+
+    const readKey =
+        "manuchekhr_read_complaints";
+
+    function getReadMessages() {
+
+        try {
+
+            return JSON.parse(
+                localStorage.getItem(readKey) || "[]"
+            );
+
+        } catch {
+
+            return [];
+
+        }
+
+    }
+
+
+    function saveReadMessages(list) {
+
+        localStorage.setItem(
+            readKey,
+            JSON.stringify(list)
+        );
+
+    }
+
+
+    /* =====================================================
+       HTML SECURITY
+    ===================================================== */
+
+    function safe(value) {
+
+        return String(value || "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+
+    }
+
+
+    /* =====================================================
+       FIREBASE CLIENT REQUESTS
+    ===================================================== */
+
+    const complaintsRef =
+        collection(db, "complaints");
+
+
+    const complaintsQuery =
+        query(
+            complaintsRef,
+            orderBy("createdAt", "desc")
+        );
+
+
+    onSnapshot(
+
+        complaintsQuery,
+
+        snapshot => {
+
+            const readMessages =
+                getReadMessages();
+
+
+            /* TOTAL */
+
+            totalEl.textContent =
+                snapshot.size;
+
+
+            /* UNREAD */
+
+            let unread = 0;
+
+
+            snapshot.forEach(item => {
+
+                if (
+                    !readMessages.includes(item.id)
+                ) {
+
+                    unread++;
+
+                }
+
+            });
+
+
+            if (unreadEl) {
+
+                unreadEl.textContent =
+                    unread;
+
+            }
+
+
+            /* =================================================
+               EMPTY
+            ================================================= */
+
+            if (snapshot.empty) {
+
+                listEl.innerHTML = `
+                    <div class="empty-message">
+
+                        Ҳоло ягон паёми клиент нест.
+
+                    </div>
+                `;
+
+                return;
+
+            }
+
+
+            /* =================================================
+               RENDER
+            ================================================= */
+
+            listEl.innerHTML = "";
+
+
+            snapshot.forEach(item => {
+
+                const data =
+                    item.data();
+
+
+                const isRead =
+                    readMessages.includes(
+                        item.id
+                    );
+
+
+                let date = "";
+
+
+                if (
+                    data.createdAt &&
+                    data.createdAt.toDate
+                ) {
+
+                    date =
+                        data.createdAt
+                            .toDate()
+                            .toLocaleString(
+                                "tg-TJ"
+                            );
+
+                }
+
+
+                const card =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                card.className =
+                    "complaint-item";
+
+
+                card.innerHTML = `
+
+                    <div class="request-top">
+
+                        <div>
+
+                            <div class="complaint-name">
+
+                                ${safe(
+                                    data.name ||
+                                    "Номаълум"
+                                )}
+
+                            </div>
+
+
+                            <div class="complaint-phone">
+
+                                ${safe(
+                                    data.phone ||
+                                    "Телефон нест"
+                                )}
+
+                            </div>
+
+                        </div>
+
+
+                        ${
+                            isRead
+
+                            ? `
+                                <span class="read-status">
+                                    ✓ ХОНДА ШУД
+                                </span>
+                            `
+
+                            : `
+                                <span class="new-label">
+                                    НАВ
+                                </span>
+                            `
+                        }
+
+                    </div>
+
+
+                    <div class="complaint-text">
+
+                        ${safe(
+                            data.message ||
+                            "Паём нест."
+                        )}
+
+                    </div>
+
+
+                    ${
+                        date
+
+                        ? `
+                            <div class="complaint-date">
+
+                                ${safe(date)}
+
+                            </div>
+                        `
+
+                        : ""
+                    }
+
+
+                    <div class="complaint-buttons">
+
+                        ${
+                            !isRead
+
+                            ? `
+                                <button
+                                    class="read-btn"
+                                    data-read-id="${item.id}"
+                                >
+                                    ✓ ХОНДА ШУД
+                                </button>
+                            `
+
+                            : ""
+                        }
+
+
+                        <button
+                            class="delete-btn"
+                            data-delete-id="${item.id}"
+                        >
+                            🗑 НЕСТ КАРДАН
+                        </button>
+
+                    </div>
+
+                `;
+
+
+                listEl.appendChild(card);
+
+            });
+
+
+            /* =================================================
+               READ BUTTON
+            ================================================= */
+
+            listEl
+                .querySelectorAll(
+                    "[data-read-id]"
+                )
+                .forEach(button => {
+
+                    button.addEventListener(
+                        "click",
+                        () => {
+
+                            const id =
+                                button.dataset.readId;
+
+
+                            const current =
+                                getReadMessages();
+
+
+                            if (
+                                !current.includes(id)
+                            ) {
+
+                                current.push(id);
+
+                            }
+
+
+                            saveReadMessages(
+                                current
+                            );
+
+
+                            /*
+                             * Real-time refresh
+                             */
+
+                            const event =
+                                new Event(
+                                    "manuchekhr-admin-refresh"
+                                );
+
+                            window.dispatchEvent(
+                                event
+                            );
+
+                        }
+                    );
+
+                });
+
+
+            /* =================================================
+               DELETE BUTTON
+            ================================================= */
+
+            listEl
+                .querySelectorAll(
+                    "[data-delete-id]"
+                )
+                .forEach(button => {
+
+                    button.addEventListener(
+                        "click",
+                        async () => {
+
+                            const id =
+                                button.dataset.deleteId;
+
+
+                            const ok =
+                                confirm(
+                                    "Ин паёми клиентро нест мекунед?"
+                                );
+
+
+                            if (!ok) {
+                                return;
+                            }
+
+
+                            try {
+
+                                await deleteDoc(
+                                    doc(
+                                        db,
+                                        "complaints",
+                                        id
+                                    )
+                                );
+
+
+                                const current =
+                                    getReadMessages()
+                                        .filter(
+                                            x => x !== id
+                                        );
+
+
+                                saveReadMessages(
+                                    current
+                                );
+
+
+                            } catch (error) {
+
+                                console.error(
+                                    error
+                                );
+
+
+                                alert(
+                                    "Хато шуд. Паём нест карда нашуд."
+                                );
+
+                            }
+
+                        }
+                    );
+
+                });
+
+        },
+
+
+        error => {
+
+            console.error(
+                "Firebase complaints error:",
+                error
+            );
+
+
+            listEl.innerHTML = `
+
+                <div class="empty-message">
+
+                    Хатогӣ ҳангоми гирифтани паёмҳо.
+
+                </div>
+
+            `;
+
+        }
+
+    );
+
+
+    /* =====================================================
+       PROJECT COUNT
+    ===================================================== */
+
+    if (projectsEl) {
+
+        getDocs(
+            collection(
+                db,
+                "projects"
+            )
+        )
+        .then(snapshot => {
+
+            projectsEl.textContent =
+                snapshot.size;
+
+        })
+        .catch(error => {
+
+            console.error(
+                "Projects error:",
+                error
+            );
+
+            projectsEl.textContent =
+                "0";
+
+        });
+
+    }
+
+
+})();
 });
