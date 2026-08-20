@@ -3,274 +3,269 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>MANUCHEKHR — Admin Panel</title>
 
   <style>
     * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
     }
 
     body {
       font-family: Arial, sans-serif;
       background:
-        radial-gradient(circle at 20% 10%, #24103d 0%, transparent 35%),
-        radial-gradient(circle at 90% 20%, #180d2b 0%, transparent 35%),
-        #07060b;
-      color: #fff;
+        radial-gradient(circle at top, #241035 0%, #09070d 45%);
+      color: white;
       min-height: 100vh;
+      padding: 30px 16px;
     }
 
-    .container {
-      width: min(1200px, 92%);
+    .admin-container {
+      width: 100%;
+      max-width: 1100px;
       margin: auto;
-      padding: 40px 0 80px;
     }
 
-    header {
+    .top {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 20px;
-      margin-bottom: 40px;
+      gap: 15px;
+      margin-bottom: 30px;
     }
 
     .logo {
-      font-size: 28px;
+      font-size: 22px;
       font-weight: 800;
-      letter-spacing: 3px;
+      letter-spacing: 2px;
     }
 
     .logo span {
-      color: #a855f7;
+      color: #b45cff;
     }
 
-    .subtitle {
-      color: #77717f;
-      margin-top: 8px;
-      letter-spacing: 3px;
-      font-size: 12px;
-    }
-
-    .refresh {
-      border: 1px solid #3b2948;
-      background: #110d17;
-      color: #fff;
-      padding: 13px 20px;
-      border-radius: 14px;
+    .top a,
+    button {
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.05);
+      color: white;
+      padding: 12px 18px;
+      border-radius: 12px;
       cursor: pointer;
-      transition: .3s;
+      text-decoration: none;
     }
 
-    .refresh:hover {
+    .top a:hover,
+    button:hover {
       border-color: #a855f7;
-      box-shadow: 0 0 25px rgba(168, 85, 247, .18);
+      background: rgba(168,85,247,.15);
+    }
+
+    .title {
+      margin-bottom: 25px;
+    }
+
+    .title small {
+      color: #b45cff;
+      letter-spacing: 2px;
+    }
+
+    .title h1 {
+      font-size: clamp(38px, 7vw, 70px);
+      margin-top: 8px;
     }
 
     .stats {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
+      gap: 15px;
       margin-bottom: 25px;
     }
 
     .stat {
-      background: rgba(16, 12, 22, .85);
-      border: 1px solid #28212f;
-      border-radius: 24px;
-      padding: 28px;
+      padding: 25px;
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 22px;
+      background: rgba(255,255,255,.035);
     }
 
-    .stat-title {
-      color: #817887;
-      font-size: 13px;
-      text-transform: uppercase;
-      letter-spacing: 2px;
+    .stat span {
+      color: #999;
+      font-size: 12px;
+      letter-spacing: 1px;
     }
 
-    .stat-number {
-      font-size: 48px;
-      font-weight: 800;
-      margin-top: 12px;
-    }
-
-    .purple {
-      color: #b86cff;
+    .stat strong {
+      display: block;
+      font-size: 42px;
+      margin-top: 10px;
     }
 
     .panel {
-      background: rgba(12, 10, 15, .9);
-      border: 1px solid #28212f;
-      border-radius: 28px;
-      padding: 30px;
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 25px;
+      background: rgba(255,255,255,.035);
+      padding: 25px;
     }
 
-    .panel-top {
+    .panel-head {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 25px;
-    }
-
-    .panel h1 {
-      font-size: 32px;
-    }
-
-    .loading {
-      color: #8b8291;
-      padding: 30px 0;
-    }
-
-    .empty {
-      padding: 50px 20px;
-      text-align: center;
-      color: #77717f;
-    }
-
-    .request {
-      border: 1px solid #292230;
-      background: #0d0a11;
-      border-radius: 20px;
-      padding: 24px;
-      margin-bottom: 16px;
-      transition: .3s;
-    }
-
-    .request:hover {
-      border-color: #63318a;
-      transform: translateY(-2px);
-    }
-
-    .request-head {
-      display: flex;
-      justify-content: space-between;
       gap: 15px;
       margin-bottom: 20px;
     }
 
-    .name {
-      font-size: 22px;
+    .panel-head h2 {
+      font-size: 25px;
+    }
+
+    #messages {
+      display: grid;
+      gap: 15px;
+    }
+
+    .message {
+      border: 1px solid rgba(255,255,255,.09);
+      border-radius: 20px;
+      padding: 22px;
+      background: rgba(0,0,0,.2);
+    }
+
+    .message-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      align-items: flex-start;
+      margin-bottom: 15px;
+    }
+
+    .client-name {
+      font-size: 20px;
       font-weight: 700;
     }
 
     .date {
-      color: #746b7c;
+      color: #777;
       font-size: 12px;
-      margin-top: 6px;
+      margin-top: 5px;
     }
 
     .status {
-      height: fit-content;
-      padding: 7px 12px;
       border-radius: 30px;
+      padding: 7px 12px;
       font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    .status.new {
+      background: #22152c;
       color: #c084fc;
-      background: rgba(168, 85, 247, .12);
-      border: 1px solid rgba(168, 85, 247, .25);
     }
 
-    .status.read {
-      color: #60a5fa;
-      background: rgba(59, 130, 246, .1);
-      border: 1px solid rgba(59, 130, 246, .2);
-    }
-
-    .status.done {
-      color: #4ade80;
-      background: rgba(34, 197, 94, .1);
-      border: 1px solid rgba(34, 197, 94, .2);
-    }
-
-    .info {
+    .message-info {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 18px;
+      gap: 8px;
+      margin-bottom: 15px;
+      color: #aaa;
     }
 
-    .info-box {
-      background: #09070c;
-      border: 1px solid #211b27;
-      border-radius: 14px;
-      padding: 15px;
+    .message-info b {
+      color: white;
     }
 
-    .label {
-      color: #696170;
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 7px;
-    }
-
-    .value {
-      color: #eee;
-      word-break: break-word;
-    }
-
-    .message {
-      background: #09070c;
-      border: 1px solid #211b27;
-      border-radius: 14px;
-      padding: 18px;
-      color: #d7d1dc;
+    .message-text {
+      border-top: 1px solid rgba(255,255,255,.08);
+      padding-top: 15px;
+      color: #ccc;
       line-height: 1.6;
-      margin-bottom: 18px;
       white-space: pre-wrap;
-      word-break: break-word;
     }
 
-    .actions {
+    .message-actions {
+      margin-top: 18px;
       display: flex;
-      gap: 10px;
+      gap: 8px;
       flex-wrap: wrap;
     }
 
-    .actions button {
-      border: 1px solid #33283d;
-      background: #120d17;
-      color: #ddd;
-      padding: 10px 15px;
-      border-radius: 11px;
-      cursor: pointer;
-      transition: .25s;
+    .message-actions button {
+      font-size: 12px;
     }
 
-    .actions button:hover {
-      border-color: #a855f7;
-      color: #fff;
-    }
-
-    .actions .delete:hover {
-      border-color: #ef4444;
-      color: #f87171;
+    .empty {
+      text-align: center;
+      padding: 60px 20px;
+      color: #777;
     }
 
     .error {
-      color: #f87171;
-      background: rgba(239, 68, 68, .08);
-      border: 1px solid rgba(239, 68, 68, .2);
-      padding: 18px;
-      border-radius: 15px;
-      line-height: 1.5;
+      color: #ff7070;
+      padding: 15px;
+      border-radius: 12px;
+      background: rgba(255,0,0,.07);
+      margin-bottom: 15px;
+    }
+
+    .login {
+      max-width: 450px;
+      margin: 80px auto;
+      padding: 30px;
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 25px;
+      background: rgba(255,255,255,.035);
+    }
+
+    .login h2 {
+      font-size: 35px;
+      margin-bottom: 25px;
+    }
+
+    .login label {
+      display: block;
+      margin-bottom: 15px;
+      color: #aaa;
+      font-size: 14px;
+    }
+
+    .login input {
+      display: block;
+      width: 100%;
+      margin-top: 7px;
+      padding: 15px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.1);
+      background: #0d0a12;
+      color: white;
+      outline: none;
+    }
+
+    .login input:focus {
+      border-color: #a855f7;
+    }
+
+    .login button {
+      width: 100%;
+      background: linear-gradient(135deg,#8b3dff,#c154e8);
+      border: 0;
+      margin-top: 10px;
+    }
+
+    #loginError {
+      color: #ff7070;
+      margin-top: 15px;
+      font-size: 13px;
+    }
+
+    .hidden {
+      display: none !important;
     }
 
     @media (max-width: 700px) {
-      .container {
-        width: 94%;
-        padding-top: 25px;
+
+      body {
+        padding: 20px 12px;
       }
 
-      header {
+      .top {
         align-items: flex-start;
-        flex-direction: column;
       }
 
       .stats {
@@ -278,24 +273,24 @@
       }
 
       .panel {
-        padding: 18px;
-        border-radius: 20px;
+        padding: 16px;
       }
 
-      .panel h1 {
-        font-size: 25px;
+      .message {
+        padding: 17px;
       }
 
-      .info {
-        grid-template-columns: 1fr;
-      }
-
-      .request-head {
+      .message-top {
         flex-direction: column;
       }
 
-      .stat-number {
-        font-size: 40px;
+      .panel-head {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .panel-head button {
+        width: 100%;
       }
     }
   </style>
@@ -303,100 +298,141 @@
 
 <body>
 
-  <div class="container">
+  <div class="admin-container">
 
-    <header>
-      <div>
+    <!-- LOGIN -->
+    <div id="loginBox" class="login">
+
+      <div class="logo">
+        MANUCHEKHR<span>.</span>
+      </div>
+
+      <h2>Admin Panel</h2>
+
+      <form id="loginForm">
+
+        <label>
+          Email
+          <input
+            id="email"
+            type="email"
+            placeholder="admin@email.com"
+            required
+          >
+        </label>
+
+        <label>
+          Password
+          <input
+            id="password"
+            type="password"
+            placeholder="••••••••"
+            required
+          >
+        </label>
+
+        <button type="submit">
+          Ворид шудан
+        </button>
+
+        <div id="loginError"></div>
+
+      </form>
+
+    </div>
+
+
+    <!-- DASHBOARD -->
+    <div id="dashboard" class="hidden">
+
+      <div class="top">
+
         <div class="logo">
           MANUCHEKHR<span>.</span>
         </div>
 
-        <div class="subtitle">
-          ADMIN DASHBOARD
-        </div>
-      </div>
+        <div>
+          <a href="index.html">
+            Сайт
+          </a>
 
-      <button class="refresh" id="refreshBtn">
-        ↻ Навсозӣ
-      </button>
-    </header>
-
-
-    <section class="stats">
-
-      <div class="stat">
-        <div class="stat-title">
-          Ҳамаи дархостҳо
+          <button id="logout">
+            Баромадан
+          </button>
         </div>
 
-        <div class="stat-number" id="totalCount">
-          0
-        </div>
       </div>
 
 
-      <div class="stat">
-        <div class="stat-title">
-          Хонда нашуда
-        </div>
+      <div class="title">
 
-        <div class="stat-number purple" id="newCount">
-          0
-        </div>
+        <small>PRIVATE DASHBOARD</small>
+
+        <h1>Admin Panel</h1>
+
       </div>
 
 
-      <div class="stat">
-        <div class="stat-title">
-          Лоиҳаҳо
+      <!-- STATS -->
+      <div class="stats">
+
+        <div class="stat">
+          <span>ҲАМАИ ПАЁМҲО</span>
+          <strong id="total">0</strong>
         </div>
 
-        <div class="stat-number" id="doneCount">
-          0
+        <div class="stat">
+          <span>ХОНДА НАШУДА</span>
+          <strong id="newMessages">0</strong>
         </div>
-      </div>
 
-    </section>
-
-
-    <section class="panel">
-
-      <div class="panel-top">
-        <h1>Паёмҳои клиентҳо</h1>
-      </div>
-
-      <div id="requests">
-        <div class="loading">
-          Дархостҳо бор шуда истодаанд...
+        <div class="stat">
+          <span>АНҶОМШУДА</span>
+          <strong id="doneMessages">0</strong>
         </div>
+
       </div>
 
-    </section>
+
+      <!-- MESSAGES -->
+      <div class="panel">
+
+        <div class="panel-head">
+
+          <h2>
+            Паёмҳои клиентҳо
+          </h2>
+
+          <button id="refresh">
+            ↻ Навсозӣ
+          </button>
+
+        </div>
+
+        <div id="messages">
+
+          <div class="empty">
+            Loading...
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
 
   </div>
 
 
-  <script type="module">
+  <!-- FIREBASE -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 
-    import {
-      initializeApp
-    } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-app.js";
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 
-    import {
-      getFirestore,
-      collection,
-      query,
-      orderBy,
-      onSnapshot,
-      updateDoc,
-      deleteDoc,
-      doc
-    } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-firestore.js";
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
 
-    /* ================================
-       FIREBASE CONFIG
-    ================================= */
+  <script>
 
     const firebaseConfig = {
 
@@ -419,432 +455,349 @@
 
       measurementId:
         "G-39DX3S5VS4"
+
     };
 
 
-    /* ================================
-       FIREBASE
-    ================================= */
+    firebase.initializeApp(firebaseConfig);
 
-    const app =
-      initializeApp(firebaseConfig);
+    const auth = firebase.auth();
 
-    const db =
-      getFirestore(app);
+    const db = firebase.firestore();
 
 
-    /* ================================
-       ELEMENTS
-    ================================= */
+    const loginBox =
+      document.getElementById("loginBox");
 
-    const requests =
-      document.getElementById("requests");
+    const dashboard =
+      document.getElementById("dashboard");
 
-    const totalCount =
-      document.getElementById("totalCount");
+    const loginForm =
+      document.getElementById("loginForm");
 
-    const newCount =
-      document.getElementById("newCount");
+    const loginError =
+      document.getElementById("loginError");
 
-    const doneCount =
-      document.getElementById("doneCount");
+    const messages =
+      document.getElementById("messages");
 
-    const refreshBtn =
-      document.getElementById("refreshBtn");
 
+    /*
+      LOGIN
+    */
 
-    let unsubscribe = null;
+    loginForm.addEventListener(
+      "submit",
+      async function(event) {
 
+        event.preventDefault();
 
-    /* ================================
-       FORMAT DATE
-    ================================= */
+        loginError.textContent = "";
 
-    function formatDate(timestamp) {
+        const email =
+          document.getElementById("email").value.trim();
 
-      if (!timestamp) {
-        return "Сана маълум нест";
-      }
+        const password =
+          document.getElementById("password").value;
 
-      try {
 
-        const date =
-          timestamp.toDate();
+        try {
 
-        return date.toLocaleString(
-          "tg-TJ",
-          {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric",
-            hour: "2-digit",
-            minute: "2-digit"
-          }
-        );
+          await auth.signInWithEmailAndPassword(
+            email,
+            password
+          );
 
-      } catch {
-
-        return "Сана маълум нест";
-      }
-    }
-
-
-    /* ================================
-       ESCAPE HTML
-    ================================= */
-
-    function escapeHTML(value) {
-
-      return String(value || "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-    }
-
-
-    /* ================================
-       STATUS
-    ================================= */
-
-    function statusText(status) {
-
-      if (status === "read") {
-        return "Хонда шуд";
-      }
-
-      if (status === "done") {
-        return "Анҷом ёфт";
-      }
-
-      return "Нав";
-    }
-
-
-    /* ================================
-       LOAD REQUESTS
-    ================================= */
-
-    function loadRequests() {
-
-      if (unsubscribe) {
-        unsubscribe();
-      }
-
-      requests.innerHTML =
-        '<div class="loading">Дархостҳо бор шуда истодаанд...</div>';
-
-
-      const q = query(
-        collection(db, "complaints"),
-        orderBy("createdAt", "desc")
-      );
-
-
-      unsubscribe = onSnapshot(
-        q,
-
-        snapshot => {
-
-          totalCount.textContent =
-            snapshot.size;
-
-
-          let newTotal = 0;
-          let doneTotal = 0;
-
-
-          if (snapshot.empty) {
-
-            newCount.textContent = "0";
-            doneCount.textContent = "0";
-
-            requests.innerHTML = `
-              <div class="empty">
-                Ҳоло ягон паёми клиент нест.
-              </div>
-            `;
-
-            return;
-          }
-
-
-          let html = "";
-
-
-          snapshot.forEach(item => {
-
-            const data = item.data();
-
-            const id = item.id;
-
-            const status =
-              data.status || "new";
-
-
-            if (status === "new") {
-              newTotal++;
-            }
-
-            if (status === "done") {
-              doneTotal++;
-            }
-
-
-            html += `
-
-              <article class="request">
-
-                <div class="request-head">
-
-                  <div>
-
-                    <div class="name">
-                      ${escapeHTML(data.name)}
-                    </div>
-
-                    <div class="date">
-                      ${formatDate(data.createdAt)}
-                    </div>
-
-                  </div>
-
-
-                  <div class="status ${escapeHTML(status)}">
-                    ${statusText(status)}
-                  </div>
-
-                </div>
-
-
-                <div class="info">
-
-                  <div class="info-box">
-
-                    <div class="label">
-                      Телефон
-                    </div>
-
-                    <div class="value">
-                      ${escapeHTML(data.phone)}
-                    </div>
-
-                  </div>
-
-
-                  <div class="info-box">
-
-                    <div class="label">
-                      Манбаъ
-                    </div>
-
-                    <div class="value">
-                      ${escapeHTML(data.source || "Website")}
-                    </div>
-
-                  </div>
-
-                </div>
-
-
-                <div class="message">
-
-                  ${escapeHTML(data.message)}
-
-                </div>
-
-
-                <div class="actions">
-
-                  <button
-                    onclick="markRead('${id}')">
-                    ✓ Хонда шуд
-                  </button>
-
-
-                  <button
-                    onclick="markDone('${id}')">
-                    ✓ Анҷом ёфт
-                  </button>
-
-
-                  <button
-                    onclick="callClient('${encodeURIComponent(data.phone || "")}')">
-                    ☎ Тамос
-                  </button>
-
-
-                  <button
-                    class="delete"
-                    onclick="deleteRequest('${id}')">
-                    🗑 Нест кардан
-                  </button>
-
-                </div>
-
-              </article>
-            `;
-          });
-
-
-          newCount.textContent =
-            newTotal;
-
-          doneCount.textContent =
-            doneTotal;
-
-
-          requests.innerHTML =
-            html;
-
-        },
-
-        error => {
+        } catch(error) {
 
           console.error(error);
 
-          requests.innerHTML = `
+          loginError.textContent =
+            "Email ё password нодуруст аст.";
 
-            <div class="error">
-
-              ❌ Хатои Firebase.
-
-              <br><br>
-
-              Эҳтимол Firestore Rules иҷозаи
-              хондани маълумотро намедиҳад.
-
-              <br><br>
-
-              ${escapeHTML(error.message)}
-
-            </div>
-          `;
         }
-      );
-    }
 
-
-    /* ================================
-       MARK READ
-    ================================= */
-
-    window.markRead = async function(id) {
-
-      try {
-
-        await updateDoc(
-          doc(db, "complaints", id),
-          {
-            status: "read"
-          }
-        );
-
-      } catch(error) {
-
-        console.error(error);
-
-        alert(
-          "Статусро тағйир додан нашуд."
-        );
       }
-    };
-
-
-    /* ================================
-       MARK DONE
-    ================================= */
-
-    window.markDone = async function(id) {
-
-      try {
-
-        await updateDoc(
-          doc(db, "complaints", id),
-          {
-            status: "done"
-          }
-        );
-
-      } catch(error) {
-
-        console.error(error);
-
-        alert(
-          "Статусро тағйир додан нашуд."
-        );
-      }
-    };
-
-
-    /* ================================
-       DELETE
-    ================================= */
-
-    window.deleteRequest = async function(id) {
-
-      const ok =
-        confirm(
-          "Ин дархостро нест кардан мехоҳед?"
-        );
-
-
-      if (!ok) {
-        return;
-      }
-
-
-      try {
-
-        await deleteDoc(
-          doc(db, "complaints", id)
-        );
-
-      } catch(error) {
-
-        console.error(error);
-
-        alert(
-          "Дархостро нест кардан нашуд."
-        );
-      }
-    };
-
-
-    /* ================================
-       CALL CLIENT
-    ================================= */
-
-    window.callClient = function(phone) {
-
-      const number =
-        decodeURIComponent(phone);
-
-      if (!number) {
-        return;
-      }
-
-      window.location.href =
-        "tel:" + number;
-    };
-
-
-    /* ================================
-       REFRESH
-    ================================= */
-
-    refreshBtn.addEventListener(
-      "click",
-      loadRequests
     );
 
 
-    /* ================================
-       START
-    ================================= */
+    /*
+      AUTH STATE
+    */
 
-    loadRequests();
+    auth.onAuthStateChanged(function(user) {
+
+      if(user) {
+
+        loginBox.classList.add("hidden");
+
+        dashboard.classList.remove("hidden");
+
+        loadMessages();
+
+      } else {
+
+        loginBox.classList.remove("hidden");
+
+        dashboard.classList.add("hidden");
+
+      }
+
+    });
+
+
+    /*
+      LOGOUT
+    */
+
+    document
+      .getElementById("logout")
+      .addEventListener("click", function() {
+
+        auth.signOut();
+
+      });
+
+
+    /*
+      REFRESH
+    */
+
+    document
+      .getElementById("refresh")
+      .addEventListener("click", function() {
+
+        loadMessages();
+
+      });
+
+
+    /*
+      LOAD CLIENT MESSAGES
+    */
+
+    async function loadMessages() {
+
+      messages.innerHTML =
+        '<div class="empty">Loading...</div>';
+
+
+      try {
+
+        const snapshot =
+          await db
+            .collection("complaints")
+            .orderBy("createdAt", "desc")
+            .get();
+
+
+        let total = 0;
+
+        let newCount = 0;
+
+        let doneCount = 0;
+
+
+        messages.innerHTML = "";
+
+
+        if(snapshot.empty) {
+
+          messages.innerHTML = `
+            <div class="empty">
+              Ҳоло ягон паёми клиент нест.
+            </div>
+          `;
+
+        }
+
+
+        snapshot.forEach(function(doc) {
+
+          const data = doc.data();
+
+          total++;
+
+
+          if(data.status === "new") {
+            newCount++;
+          }
+
+
+          if(data.status === "done") {
+            doneCount++;
+          }
+
+
+          const card =
+            document.createElement("div");
+
+          card.className = "message";
+
+
+          const date =
+            data.createdAt &&
+            data.createdAt.toDate
+              ? data.createdAt.toDate()
+                  .toLocaleString("tg-TJ")
+              : "—";
+
+
+          card.innerHTML = `
+
+            <div class="message-top">
+
+              <div>
+
+                <div class="client-name">
+                  ${escapeHTML(data.name || "Без ном")}
+                </div>
+
+                <div class="date">
+                  ${date}
+                </div>
+
+              </div>
+
+              <div class="status">
+                ${escapeHTML(data.status || "new")}
+              </div>
+
+            </div>
+
+
+            <div class="message-info">
+
+              <div>
+                📞 <b>Телефон:</b>
+                ${escapeHTML(data.phone || "—")}
+              </div>
+
+              <div>
+                🏢 <b>Бизнес:</b>
+                ${escapeHTML(data.business || "—")}
+              </div>
+
+              <div>
+                💼 <b>Хизмат:</b>
+                ${escapeHTML(data.service || "—")}
+              </div>
+
+            </div>
+
+
+            <div class="message-text">
+              ${escapeHTML(data.message || "Паём нест")}
+            </div>
+
+
+            <div class="message-actions">
+
+              <button
+                onclick="changeStatus('${doc.id}', 'new')">
+                🆕 New
+              </button>
+
+              <button
+                onclick="changeStatus('${doc.id}', 'read')">
+                👁 Read
+              </button>
+
+              <button
+                onclick="changeStatus('${doc.id}', 'done')">
+                ✅ Done
+              </button>
+
+            </div>
+
+          `;
+
+
+          messages.appendChild(card);
+
+        });
+
+
+        document.getElementById("total").textContent =
+          total;
+
+        document.getElementById("newMessages").textContent =
+          newCount;
+
+        document.getElementById("doneMessages").textContent =
+          doneCount;
+
+
+      } catch(error) {
+
+        console.error(error);
+
+        messages.innerHTML = `
+
+          <div class="error">
+
+            Firebase error.
+
+            <br><br>
+
+            Firestore Rules ё Index-ро санҷед.
+
+          </div>
+
+        `;
+
+      }
+
+    }
+
+
+    /*
+      CHANGE STATUS
+    */
+
+    async function changeStatus(id, status) {
+
+      try {
+
+        await db
+          .collection("complaints")
+          .doc(id)
+          .update({
+            status: status
+          });
+
+
+        loadMessages();
+
+
+      } catch(error) {
+
+        console.error(error);
+
+        alert(
+          "Status тағйир дода нашуд."
+        );
+
+      }
+
+    }
+
+
+    /*
+      SECURITY:
+      HTML-ро аз паёми клиент тоза мекунем.
+    */
+
+    function escapeHTML(value) {
+
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+    }
 
   </script>
 
