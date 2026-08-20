@@ -1,269 +1,197 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
-
-import {
-    getFirestore,
-    collection,
-    addDoc,
-    getDocs,
-    deleteDoc,
-    doc,
-    serverTimestamp,
-    query,
-    orderBy,
-    onSnapshot
-} from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
+/* =========================================
+   MANUCHEKHR SMM
+   PREMIUM JAVASCRIPT
+========================================= */
 
 
-// =====================================
-// FIREBASE
-// =====================================
+/* =========================================
+   01. PRELOADER
+========================================= */
 
-const firebaseConfig = {
-    apiKey: "AIzaSyAteF9GeUK8RyKohaiBy_K7dsLix4Z0Sho",
-    authDomain: "manuchekhr-smm.firebaseapp.com",
-    projectId: "manuchekhr-smm",
-    storageBucket: "manuchekhr-smm.firebasestorage.app",
-    messagingSenderId: "226231175635",
-    appId: "1:226231175635:web:d9c1b6803e6cb129b44726",
-    measurementId: "G-5M5SP1PPTY"
-};
+window.addEventListener("load", () => {
 
-const app = initializeApp(firebaseConfig);
+    const preloader = document.getElementById("preloader");
 
-const db = getFirestore(app);
+    if (preloader) {
 
+        setTimeout(() => {
+            preloader.classList.add("hide");
+        }, 900);
 
-// =====================================
-// ADMIN PASSWORD
-// =====================================
-
-const ADMIN_PASSWORD = "123456";
-
-
-// =====================================
-// ELEMENTS
-// =====================================
-
-const openAdmin = document.getElementById("openAdmin");
-
-const loginModal = document.getElementById("loginModal");
-const adminModal = document.getElementById("adminModal");
-
-const closeLogin = document.getElementById("closeLogin");
-const closeAdmin = document.getElementById("closeAdmin");
-
-const loginBtn = document.getElementById("loginBtn");
-const logoutBtn = document.getElementById("logout");
-
-const adminPassword = document.getElementById("adminPassword");
-
-const complaintForm =
-    document.getElementById("complaintForm");
-
-const complaintList =
-    document.getElementById("complaintList");
-
-const complaintCount =
-    document.getElementById("complaintCount");
-
-const addProjectBtn =
-    document.getElementById("addProject");
-
-const projectName =
-    document.getElementById("projectName");
-
-const projectType =
-    document.getElementById("projectType");
-
-const projectImage =
-    document.getElementById("projectImage");
-
-const portfolioList =
-    document.getElementById("portfolioList");
-
-const adminProjectList =
-    document.getElementById("adminProjectList");
-
-const mobileMenu =
-    document.getElementById("mobileMenu");
-
-const nav =
-    document.getElementById("nav");
-
-
-// =====================================
-// MODAL
-// =====================================
-
-function openModal(modal) {
-
-    if (!modal) {
-        console.error("Modal ёфт нашуд!");
-        return;
     }
 
-    modal.classList.add("active");
+});
 
-    document.body.style.overflow = "hidden";
+
+/* =========================================
+   02. HEADER SCROLL EFFECT
+========================================= */
+
+const header = document.getElementById("header");
+
+function headerScroll(){
+
+    if (!header) return;
+
+    if (window.scrollY > 40){
+
+        header.classList.add("scrolled");
+
+    } else {
+
+        header.classList.remove("scrolled");
+
+    }
+
+}
+
+window.addEventListener("scroll", headerScroll);
+
+headerScroll();
+
+
+/* =========================================
+   03. MOBILE MENU
+========================================= */
+
+const menuButton = document.getElementById("menuButton");
+const nav = document.getElementById("nav");
+
+if (menuButton && nav){
+
+    menuButton.addEventListener("click", () => {
+
+        nav.classList.toggle("open");
+
+        menuButton.classList.toggle("active");
+
+    });
+
+
+    /* Close menu after clicking a link */
+
+    nav.querySelectorAll("a").forEach(link => {
+
+        link.addEventListener("click", () => {
+
+            nav.classList.remove("open");
+
+            menuButton.classList.remove("active");
+
+        });
+
+    });
+
 }
 
 
-function closeModal(modal) {
+/* =========================================
+   04. ESCAPE CLOSE MENU
+========================================= */
 
-    if (!modal) return;
+document.addEventListener("keydown", (event) => {
 
-    modal.classList.remove("active");
+    if (event.key === "Escape"){
 
-    document.body.style.overflow = "";
-}
+        if (nav){
 
+            nav.classList.remove("open");
 
-// =====================================
-// OPEN ADMIN
-// =====================================
-
-if (openAdmin) {
-
-    openAdmin.addEventListener("click", () => {
-
-        openModal(loginModal);
-
-        if (adminPassword) {
-            adminPassword.focus();
         }
 
-    });
+        if (menuButton){
 
-}
+            menuButton.classList.remove("active");
 
+        }
 
-// =====================================
-// CLOSE LOGIN
-// =====================================
+    }
 
-if (closeLogin) {
-
-    closeLogin.addEventListener("click", () => {
-
-        closeModal(loginModal);
-
-    });
-
-}
+});
 
 
-// =====================================
-// CLOSE ADMIN
-// =====================================
+/* =========================================
+   05. SMOOTH SCROLL
+========================================= */
 
-if (closeAdmin) {
+document.querySelectorAll('a[href^="#"]').forEach(link => {
 
-    closeAdmin.addEventListener("click", () => {
+    link.addEventListener("click", function(event){
 
-        closeModal(adminModal);
+        const targetId = this.getAttribute("href");
 
-    });
-
-}
-
-
-// =====================================
-// LOGIN
-// =====================================
-
-if (loginBtn) {
-
-    loginBtn.addEventListener("click", async () => {
-
-        const password =
-            adminPassword.value.trim();
-
-
-        if (password !== ADMIN_PASSWORD) {
-
-            alert("Парол нодуруст аст ❌");
-
-            adminPassword.value = "";
-
-            adminPassword.focus();
+        if (
+            !targetId ||
+            targetId === "#"
+        ){
 
             return;
+
         }
 
+        const target = document.querySelector(targetId);
 
-        sessionStorage.setItem(
-            "adminLogin",
-            "true"
-        );
+        if (!target) return;
 
+        event.preventDefault();
 
-        closeModal(loginModal);
+        const headerHeight =
+            header ?
+            header.offsetHeight :
+            0;
 
-        openModal(adminModal);
+        const position =
+            target.getBoundingClientRect().top +
+            window.scrollY -
+            headerHeight;
 
+        window.scrollTo({
 
-        await loadAdminProjects();
+            top: position,
 
-        loadComplaints();
+            behavior: "smooth"
+
+        });
 
     });
 
-}
+});
 
 
-// ENTER FOR PASSWORD
+/* =========================================
+   06. FAQ
+========================================= */
 
-if (adminPassword) {
+const faqItems =
+    document.querySelectorAll(".faq-item");
 
-    adminPassword.addEventListener(
-        "keydown",
-        (event) => {
+faqItems.forEach(item => {
 
-            if (event.key === "Enter") {
+    const button =
+        item.querySelector("button");
 
-                loginBtn.click();
+    if (!button) return;
 
-            }
+    button.addEventListener("click", () => {
 
-        }
-    );
-
-}
-
-
-// =====================================
-// LOGOUT
-// =====================================
-
-if (logoutBtn) {
-
-    logoutBtn.addEventListener("click", () => {
-
-        sessionStorage.removeItem(
-            "adminLogin"
-        );
-
-        closeModal(adminModal);
-
-    });
-
-}
+        const isActive =
+            item.classList.contains("active");
 
 
-// =====================================
-// CLOSE WHEN CLICK OUTSIDE
-// =====================================
+        /* Close all */
 
-[loginModal, adminModal].forEach(modal => {
+        faqItems.forEach(otherItem => {
 
-    if (!modal) return;
+            otherItem.classList.remove("active");
+
+        });
 
 
-    modal.addEventListener("click", (event) => {
+        /* Open selected */
 
-        if (event.target === modal) {
+        if (!isActive){
 
-            closeModal(modal);
+            item.classList.add("active");
 
         }
 
@@ -272,408 +200,123 @@ if (logoutBtn) {
 });
 
 
-// =====================================
-// MOBILE MENU
-// =====================================
+/* =========================================
+   07. SERVICE MODAL
+========================================= */
 
-if (mobileMenu) {
+const serviceModal =
+    document.getElementById("serviceModal");
 
-    mobileMenu.addEventListener("click", () => {
+const modalTitle =
+    document.getElementById("modalTitle");
 
-        nav.classList.toggle("active");
+const modalText =
+    document.getElementById("modalText");
 
-    });
+const modalClose =
+    document.getElementById("modalClose");
 
-}
 
+const serviceDescriptions = {
 
-if (nav) {
+    "SMM":
+        "Идоракунии пурраи саҳифа, нақшаи контент, стратегия, таҳлил ва рушди бренди шумо.",
 
-    nav.querySelectorAll("a").forEach(link => {
+    "Таҳияи контент":
+        "Таҳияи идея, матн, визуал ва контенти мувофиқ ба аудитория ва ҳадафи бизнес.",
 
-        link.addEventListener("click", () => {
+    "Reels":
+        "Таҳияи видеоҳои кӯтоҳи ҷолиб барои зиёд кардани дастрасӣ, тамошо ва ҷалби аудитория.",
 
-            nav.classList.remove("active");
+    "Монтажи видео":
+        "Монтажи касбӣ, субтитр, мусиқӣ, эффектҳо ва омодасозии видео барои Instagram ва дигар платформаҳо.",
 
-        });
+    "Маркетинг":
+        "Таҳлили аудитория, рақибон, маҳсулот ва таҳияи роҳҳои самараноки ҷалби мизоҷ.",
 
-    });
+    "Рекламаи мақсаднок":
+        "Танзими реклама барои аудиторияи мувофиқ бо ҳадафи равшан ва назорати натиҷаҳо.",
 
-}
+    "Брендинг":
+        "Таҳияи услуби ягонаи визуалӣ ва пешниҳоди бренд барои шинохта шудани бизнес."
 
+};
 
-// =====================================
-// ESCAPE HTML
-// =====================================
 
-function escapeHTML(value) {
+document
+    .querySelectorAll(".service-button")
+    .forEach(button => {
 
-    return String(value ?? "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
+        button.addEventListener("click", () => {
 
-}
+            const title =
+                button.dataset.title;
 
+            if (modalTitle){
 
-// =====================================
-// IMAGE TO BASE64
-// =====================================
+                modalTitle.textContent =
+                    title;
 
-function imageToBase64(file) {
-
-    return new Promise((resolve, reject) => {
-
-        const reader =
-            new FileReader();
-
-
-        reader.onload = () => {
-
-            resolve(reader.result);
-
-        };
-
-
-        reader.onerror = reject;
-
-
-        reader.readAsDataURL(file);
-
-    });
-
-}
-
-
-// =====================================
-// LOAD PORTFOLIO
-// =====================================
-
-async function loadProjects() {
-
-    if (!portfolioList) return;
-
-
-    try {
-
-        const snapshot =
-            await getDocs(
-                collection(db, "projects")
-            );
-
-
-        portfolioList.innerHTML = "";
-
-
-        if (snapshot.empty) {
-
-            portfolioList.innerHTML = `
-                <div class="empty-portfolio">
-                    Портфолио ҳоло холӣ аст.
-                </div>
-            `;
-
-            return;
-        }
-
-
-        snapshot.forEach(item => {
-
-            const data = item.data();
-
-
-            const card =
-                document.createElement("article");
-
-
-            card.className =
-                "portfolio-card";
-
-
-            card.innerHTML = `
-
-                ${
-                    data.image
-                    ?
-                    `
-                    <img
-                        src="${data.image}"
-                        alt="${escapeHTML(data.name)}"
-                    >
-                    `
-                    :
-                    `
-                    <div
-                        style="
-                        height:245px;
-                        display:flex;
-                        align-items:center;
-                        justify-content:center;
-                        background:#111;
-                        color:#a855f7;
-                        font-size:50px;
-                        font-weight:900;
-                        "
-                    >
-                        MB
-                    </div>
-                    `
-                }
-
-                <div class="portfolio-info">
-
-                    <small>
-                        ${escapeHTML(data.type)}
-                    </small>
-
-                    <h3>
-                        ${escapeHTML(data.name)}
-                    </h3>
-
-                </div>
-            `;
-
-
-            portfolioList.appendChild(card);
-
-        });
-
-
-    } catch (error) {
-
-        console.error(
-            "Portfolio error:",
-            error
-        );
-
-
-        portfolioList.innerHTML = `
-            <div class="empty-portfolio">
-                Портфолиоро бор карда нашуд.
-            </div>
-        `;
-
-    }
-
-}
-
-
-// =====================================
-// LOAD ADMIN PROJECTS
-// =====================================
-
-async function loadAdminProjects() {
-
-    if (!adminProjectList) return;
-
-
-    try {
-
-        const snapshot =
-            await getDocs(
-                collection(db, "projects")
-            );
-
-
-        adminProjectList.innerHTML = "";
-
-
-        if (snapshot.empty) {
-
-            adminProjectList.innerHTML = `
-                <div class="empty-message">
-                    Ҳоло проект нест.
-                </div>
-            `;
-
-            return;
-        }
-
-
-        snapshot.forEach(item => {
-
-            const data =
-                item.data();
-
-
-            const div =
-                document.createElement("div");
-
-
-            div.className =
-                "admin-item";
-
-
-            div.innerHTML = `
-
-                <div class="admin-item-info">
-
-                    <strong>
-                        ${escapeHTML(data.name)}
-                    </strong>
-
-                    <span>
-                        ${escapeHTML(data.type)}
-                    </span>
-
-                </div>
-
-                <button
-                    class="delete-project"
-                    data-id="${item.id}"
-                    type="button"
-                >
-                    Нест кардан
-                </button>
-
-            `;
-
-
-            adminProjectList.appendChild(div);
-
-        });
-
-
-        document
-            .querySelectorAll(".delete-project")
-            .forEach(button => {
-
-                button.addEventListener(
-                    "click",
-                    () => {
-
-                        deleteProject(
-                            button.dataset.id
-                        );
-
-                    }
-                );
-
-            });
-
-
-    } catch (error) {
-
-        console.error(
-            "Admin projects error:",
-            error
-        );
-
-
-        adminProjectList.innerHTML = `
-            <div class="empty-message">
-                Firebase Rules-ро санҷед.
-            </div>
-        `;
-
-    }
-
-}
-
-
-// =====================================
-// ADD PROJECT
-// =====================================
-
-if (addProjectBtn) {
-
-    addProjectBtn.addEventListener(
-        "click",
-        async () => {
-
-            const name =
-                projectName.value.trim();
-
-            const type =
-                projectType.value.trim();
-
-            const file =
-                projectImage.files[0];
-
-
-            if (!name || !type) {
-
-                alert(
-                    "Номи проект ва хизматро пур кунед."
-                );
-
-                return;
             }
 
 
-            addProjectBtn.disabled = true;
+            if (modalText){
 
-            addProjectBtn.textContent =
-                "Илова шуда истодааст...";
+                modalText.textContent =
+                    serviceDescriptions[title] ||
+                    "Маълумоти муфассал дар бораи ин хизматро ҳангоми машварат мегиред.";
 
-
-            try {
-
-                let image = "";
+            }
 
 
-                if (file) {
+            if (serviceModal){
 
-                    image =
-                        await imageToBase64(file);
+                serviceModal.classList.add("show");
 
-                }
+                document.body.style.overflow =
+                    "hidden";
 
+            }
 
-                await addDoc(
-                    collection(db, "projects"),
-                    {
+        });
 
-                        name: name,
-
-                        type: type,
-
-                        image: image,
-
-                        createdAt:
-                            serverTimestamp()
-
-                    }
-                );
+    });
 
 
-                projectName.value = "";
+function closeServiceModal(){
 
-                projectType.value = "";
+    if (!serviceModal) return;
 
-                projectImage.value = "";
+    serviceModal.classList.remove("show");
 
+    document.body.style.overflow =
+        "";
 
-                alert(
-                    "Проект илова шуд ✅"
-                );
-
-
-                await loadProjects();
-
-                await loadAdminProjects();
+}
 
 
-            } catch (error) {
+if (modalClose){
 
-                console.error(
-                    "Add project error:",
-                    error
-                );
+    modalClose.addEventListener(
+        "click",
+        closeServiceModal
+    );
+
+}
 
 
-                alert(
-                    "Проект илова нашуд. Firebase Rules-ро санҷед."
-                );
+if (serviceModal){
 
-            } finally {
+    serviceModal.addEventListener(
+        "click",
+        event => {
 
-                addProjectBtn.disabled = false;
+            if (
+                event.target ===
+                serviceModal
+            ){
 
-                addProjectBtn.textContent =
-                    "+ Илова кардани проект";
+                closeServiceModal();
 
             }
 
@@ -683,163 +326,204 @@ if (addProjectBtn) {
 }
 
 
-// =====================================
-// DELETE PROJECT
-// =====================================
+/* =========================================
+   08. PORTFOLIO FILTER
+========================================= */
 
-async function deleteProject(id) {
+const filterButtons =
+    document.querySelectorAll(
+        ".portfolio-filter button"
+    );
 
-    if (
-        !confirm(
-            "Ин проектро нест кардан мехоҳед?"
-        )
-    ) {
-        return;
-    }
-
-
-    try {
-
-        await deleteDoc(
-            doc(db, "projects", id)
-        );
+const portfolioItems =
+    document.querySelectorAll(
+        ".portfolio-item"
+    );
 
 
-        await loadProjects();
+filterButtons.forEach(button => {
 
-        await loadAdminProjects();
+    button.addEventListener("click", () => {
 
-
-    } catch (error) {
-
-        console.error(
-            "Delete project error:",
-            error
-        );
+        const filter =
+            button.dataset.filter;
 
 
-        alert(
-            "Проектро нест карда нашуд."
-        );
+        /* Active button */
 
-    }
+        filterButtons.forEach(btn => {
 
-}
+            btn.classList.remove(
+                "active"
+            );
+
+        });
+
+        button.classList.add("active");
 
 
-// =====================================
-// COMPLAINT FORM
-// =====================================
+        /* Filter items */
 
-if (complaintForm) {
+        portfolioItems.forEach(item => {
 
-    complaintForm.addEventListener(
+            const category =
+                item.dataset.category;
+
+
+            if (
+                filter === "all" ||
+                category === filter
+            ){
+
+                item.style.display =
+                    "block";
+
+                setTimeout(() => {
+
+                    item.style.opacity = "1";
+
+                    item.style.transform =
+                        "translateY(0)";
+
+                }, 20);
+
+            } else {
+
+                item.style.opacity = "0";
+
+                item.style.transform =
+                    "translateY(15px)";
+
+                setTimeout(() => {
+
+                    item.style.display =
+                        "none";
+
+                }, 250);
+
+            }
+
+        });
+
+    });
+
+});
+
+
+/* =========================================
+   09. PLAN BUTTONS
+========================================= */
+
+const planButtons =
+    document.querySelectorAll(
+        ".plan-button"
+    );
+
+
+planButtons.forEach(button => {
+
+    button.addEventListener("click", () => {
+
+        const plan =
+            button.dataset.plan;
+
+        const messageBox =
+            document.querySelector(
+                'textarea[name="message"]'
+            );
+
+
+        if (
+            messageBox &&
+            plan
+        ){
+
+            messageBox.value =
+                `Ман мехоҳам тарифи "${plan}"-ро интихоб кунам.`;
+
+        }
+
+    });
+
+});
+
+
+/* =========================================
+   10. CONTACT FORM
+========================================= */
+
+const contactForm =
+    document.getElementById(
+        "contactForm"
+    );
+
+const formMessage =
+    document.getElementById(
+        "formMessage"
+    );
+
+
+if (contactForm){
+
+    contactForm.addEventListener(
         "submit",
-        async (event) => {
+        event => {
 
             event.preventDefault();
 
 
-            const name =
-                document
-                    .getElementById("name")
-                    .value
-                    .trim();
+            const formData =
+                new FormData(
+                    contactForm
+                );
 
+
+            const name =
+                formData.get("name");
+
+            const business =
+                formData.get("business");
 
             const phone =
-                document
-                    .getElementById("phone")
-                    .value
-                    .trim();
-
+                formData.get("phone");
 
             const message =
-                document
-                    .getElementById("message")
-                    .value
-                    .trim();
+                formData.get("message");
 
 
-            const button =
-                complaintForm.querySelector(
-                    "button"
-                );
+            const whatsappMessage =
+
+                `Салом Манучеҳр!%0A%0A` +
+
+                `Ном: ${name}%0A` +
+
+                `Бизнес: ${business}%0A` +
+
+                `Телефон: ${phone}%0A%0A` +
+
+                `Дар бораи проект:%0A${message}`;
 
 
-            if (
-                !name ||
-                !phone ||
-                !message
-            ) {
-
-                alert(
-                    "Лутфан ҳамаи майдонҳоро пур кунед."
-                );
-
-                return;
-            }
+            const whatsappURL =
+                `https://wa.me/992504440101?text=${whatsappMessage}`;
 
 
-            button.disabled = true;
+            if (formMessage){
 
-            button.textContent =
-                "Фиристода истодааст...";
-
-
-            try {
-
-                await addDoc(
-                    collection(
-                        db,
-                        "complaints"
-                    ),
-                    {
-
-                        name: name,
-
-                        phone: phone,
-
-                        message: message,
-
-                        status: "new",
-
-                        createdAt:
-                            serverTimestamp()
-
-                    }
-                );
-
-
-                complaintForm.reset();
-
-
-                alert(
-                    "Шикояти шумо фиристода шуд ✅"
-                );
-
-
-            } catch (error) {
-
-                console.error(
-                    "Complaint error:",
-                    error
-                );
-
-
-                alert(
-                    "Хато шуд. Firebase Rules-ро санҷед."
-                );
-
-
-            } finally {
-
-                button.disabled = false;
-
-                button.textContent =
-                    "Фиристодан →";
+                formMessage.textContent =
+                    "Маълумот омода шуд. Ҳоло WhatsApp кушода мешавад...";
 
             }
+
+
+            setTimeout(() => {
+
+                window.open(
+                    whatsappURL,
+                    "_blank"
+                );
+
+            }, 700);
 
         }
     );
@@ -847,169 +531,502 @@ if (complaintForm) {
 }
 
 
-// =====================================
-// LOAD COMPLAINTS
-// =====================================
+/* =========================================
+   11. SCROLL REVEAL ANIMATION
+========================================= */
 
-function loadComplaints() {
-
-    if (!complaintList) return;
-
-
-    const complaintsQuery =
-        query(
-            collection(
-                db,
-                "complaints"
-            ),
-            orderBy(
-                "createdAt",
-                "desc"
-            )
-        );
-
-
-    onSnapshot(
-        complaintsQuery,
-        snapshot => {
-
-            complaintList.innerHTML = "";
+const revealElements =
+    document.querySelectorAll(
+        ".section-title, " +
+        ".info-card, " +
+        ".service-card, " +
+        ".business-grid div, " +
+        ".check-grid div, " +
+        ".timeline > div, " +
+        ".process-grid > div, " +
+        ".result-grid > div, " +
+        ".portfolio-item, " +
+        ".review-grid article, " +
+        ".price-card, " +
+        ".advantages article, " +
+        ".contact-button, " +
+        ".about-photo, " +
+        ".skills span"
+    );
 
 
-            if (complaintCount) {
+revealElements.forEach(element => {
 
-                complaintCount.textContent =
-                    snapshot.size;
+    element.style.opacity = "0";
 
-            }
+    element.style.transform =
+        "translateY(30px)";
 
+    element.style.transition =
+        "opacity .8s ease, transform .8s ease";
 
-            if (snapshot.empty) {
-
-                complaintList.innerHTML = `
-                    <div class="empty-message">
-                        Ҳоло шикоят нест.
-                    </div>
-                `;
-
-                return;
-            }
+});
 
 
-            snapshot.forEach(item => {
+const revealObserver =
+    new IntersectionObserver(
+        entries => {
 
-                const data =
-                    item.data();
+            entries.forEach(
+                (entry, index) => {
+
+                    if (
+                        entry.isIntersecting
+                    ){
+
+                        setTimeout(() => {
+
+                            entry.target.style.opacity =
+                                "1";
+
+                            entry.target.style.transform =
+                                "translateY(0)";
+
+                        }, index * 40);
 
 
-                const div =
-                    document.createElement(
-                        "div"
-                    );
+                        revealObserver.unobserve(
+                            entry.target
+                        );
+
+                    }
+
+                }
+            );
+
+        },
+        {
+            threshold:.12
+        }
+    );
 
 
-                div.className =
-                    "complaint-item";
+revealElements.forEach(element => {
+
+    revealObserver.observe(
+        element
+    );
+
+});
 
 
-                let date = "";
+/* =========================================
+   12. NUMBER COUNTER
+========================================= */
 
+const counters =
+    document.querySelectorAll(
+        ".stat strong"
+    );
+
+
+const counterObserver =
+    new IntersectionObserver(
+        entries => {
+
+            entries.forEach(entry => {
 
                 if (
-                    data.createdAt &&
-                    data.createdAt.toDate
-                ) {
+                    !entry.isIntersecting
+                ){
 
-                    date =
-                        data.createdAt
-                            .toDate()
-                            .toLocaleString(
-                                "tg-TJ"
-                            );
+                    return;
 
                 }
 
 
-                div.innerHTML = `
+                const element =
+                    entry.target;
 
-                    <strong>
-                        ${escapeHTML(data.name)}
-                    </strong>
+                const original =
+                    element.textContent.trim();
 
-                    <div class="complaint-phone">
-                        ${escapeHTML(data.phone)}
-                    </div>
 
-                    <div class="complaint-message">
-                        ${escapeHTML(data.message)}
-                    </div>
+                const number =
+                    parseInt(
+                        original.replace(
+                            /\D/g,
+                            ""
+                        )
+                    );
 
-                    ${
-                        date
-                        ?
-                        `
-                        <span class="complaint-date">
-                            ${date}
-                        </span>
-                        `
-                        :
-                        ""
+
+                if (
+                    isNaN(number)
+                ){
+
+                    return;
+
+                }
+
+
+                const suffix =
+                    original.includes("+")
+                    ? "+"
+                    : "";
+
+
+                let current = 0;
+
+                const duration = 1200;
+
+                const start =
+                    performance.now();
+
+
+                function updateCounter(
+                    timestamp
+                ){
+
+                    const progress =
+                        Math.min(
+                            (timestamp - start) /
+                            duration,
+                            1
+                        );
+
+
+                    const ease =
+                        1 -
+                        Math.pow(
+                            1 - progress,
+                            3
+                        );
+
+
+                    current =
+                        Math.floor(
+                            number * ease
+                        );
+
+
+                    element.textContent =
+                        current + suffix;
+
+
+                    if (
+                        progress < 1
+                    ){
+
+                        requestAnimationFrame(
+                            updateCounter
+                        );
+
                     }
 
-                    <br>
-
-                    <button
-                        class="delete-complaint"
-                        data-id="${item.id}"
-                        type="button"
-                    >
-                        Нест кардан
-                    </button>
-
-                `;
+                }
 
 
-                complaintList.appendChild(div);
+                requestAnimationFrame(
+                    updateCounter
+                );
+
+
+                counterObserver.unobserve(
+                    element
+                );
 
             });
 
+        },
+        {
+            threshold:.7
+        }
+    );
 
-            document
-                .querySelectorAll(
-                    ".delete-complaint"
-                )
-                .forEach(button => {
 
-                    button.addEventListener(
-                        "click",
-                        () => {
+counters.forEach(counter => {
 
-                            deleteComplaint(
-                                button.dataset.id
-                            );
+    counterObserver.observe(
+        counter
+    );
 
-                        }
+});
+
+
+/* =========================================
+   13. CURSOR GLOW
+========================================= */
+
+const cursorGlow =
+    document.createElement("div");
+
+
+cursorGlow.style.position =
+    "fixed";
+
+cursorGlow.style.width =
+    "250px";
+
+cursorGlow.style.height =
+    "250px";
+
+cursorGlow.style.borderRadius =
+    "50%";
+
+cursorGlow.style.pointerEvents =
+    "none";
+
+cursorGlow.style.zIndex =
+    "-1";
+
+cursorGlow.style.background =
+    "radial-gradient(circle, rgba(168,85,247,.08), transparent 70%)";
+
+cursorGlow.style.transform =
+    "translate(-50%,-50%)";
+
+cursorGlow.style.transition =
+    "left .15s ease, top .15s ease";
+
+document.body.appendChild(
+    cursorGlow
+);
+
+
+document.addEventListener(
+    "mousemove",
+    event => {
+
+        cursorGlow.style.left =
+            event.clientX + "px";
+
+        cursorGlow.style.top =
+            event.clientY + "px";
+
+    }
+);
+
+
+/* =========================================
+   14. 3D CARD EFFECT
+========================================= */
+
+const cards =
+    document.querySelectorAll(
+        ".service-card, " +
+        ".price-card, " +
+        ".review-grid article, " +
+        ".info-card"
+    );
+
+
+cards.forEach(card => {
+
+    card.addEventListener(
+        "mousemove",
+        event => {
+
+            const rect =
+                card.getBoundingClientRect();
+
+            const x =
+                event.clientX -
+                rect.left;
+
+            const y =
+                event.clientY -
+                rect.top;
+
+
+            const centerX =
+                rect.width / 2;
+
+            const centerY =
+                rect.height / 2;
+
+
+            const rotateX =
+                ((y - centerY) /
+                centerY) *
+                -3;
+
+
+            const rotateY =
+                ((x - centerX) /
+                centerX) *
+                3;
+
+
+            card.style.transform =
+                `perspective(800px)
+                 rotateX(${rotateX}deg)
+                 rotateY(${rotateY}deg)
+                 translateY(-6px)`;
+
+        }
+    );
+
+
+    card.addEventListener(
+        "mouseleave",
+        () => {
+
+            card.style.transform =
+                "";
+
+        }
+    );
+
+});
+
+
+/* =========================================
+   15. ESC CLOSE MODAL
+========================================= */
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            event.key === "Escape"
+        ){
+
+            closeServiceModal();
+
+        }
+
+    }
+);
+
+
+/* =========================================
+   16. ACTIVE NAVIGATION
+========================================= */
+
+const sections =
+    document.querySelectorAll(
+        "main section[id]"
+    );
+
+const navLinks =
+    document.querySelectorAll(
+        ".nav a"
+    );
+
+
+const activeObserver =
+    new IntersectionObserver(
+        entries => {
+
+            entries.forEach(entry => {
+
+                if (
+                    !entry.isIntersecting
+                ){
+
+                    return;
+
+                }
+
+
+                const id =
+                    entry.target.id;
+
+
+                navLinks.forEach(link => {
+
+                    link.classList.remove(
+                        "current"
                     );
+
+
+                    if (
+                        link.getAttribute(
+                            "href"
+                        ) ===
+                        `#${id}`
+                    ){
+
+                        link.classList.add(
+                            "current"
+                        );
+
+                    }
 
                 });
 
+            });
+
         },
+        {
+            rootMargin:
+                "-35% 0px -55% 0px"
+        }
+    );
 
 
-        error => {
+sections.forEach(section => {
 
-            console.error(
-                "Complaint listener error:",
-                error
-            );
+    activeObserver.observe(
+        section
+    );
+
+});
 
 
-            complaintList.innerHTML = `
-                <div class="empty-message">
-                    Firebase Rules иҷозаи хондани
-                    шикоятҳоро намедиҳад.
-                </div>
-            `;
+/* =========================================
+   17. TILT HERO VISUAL
+========================================= */
+
+const visualCard =
+    document.querySelector(
+        ".visual-card"
+    );
+
+
+if (visualCard){
+
+    visualCard.addEventListener(
+        "mousemove",
+        event => {
+
+            const rect =
+                visualCard.getBoundingClientRect();
+
+
+            const x =
+                event.clientX -
+                rect.left;
+
+
+            const y =
+                event.clientY -
+                rect.top;
+
+
+            const rotateY =
+                ((x / rect.width) - .5) *
+                12;
+
+
+            const rotateX =
+                ((y / rect.height) - .5) *
+                -12;
+
+
+            visualCard.style.transform =
+                `perspective(1000px)
+                 rotateX(${rotateX}deg)
+                 rotateY(${rotateY}deg)
+                 translateY(-8px)`;
+
+        }
+    );
+
+
+    visualCard.addEventListener(
+        "mouseleave",
+        () => {
+
+            visualCard.style.transform =
+                "";
 
         }
     );
@@ -1017,55 +1034,54 @@ function loadComplaints() {
 }
 
 
-// =====================================
-// DELETE COMPLAINT
-// =====================================
+/* =========================================
+   18. DYNAMIC YEAR
+========================================= */
 
-async function deleteComplaint(id) {
+document
+    .querySelectorAll(
+        ".footer-bottom span"
+    )
+    .forEach(element => {
 
-    if (
-        !confirm(
-            "Ин шикоятро нест кардан мехоҳед?"
-        )
-    ) {
-        return;
-    }
+        const year =
+            new Date().getFullYear();
+
+        element.textContent =
+            `© ${year} MANUCHEKHR. Ҳамаи ҳуқуқҳо ҳифз шудаанд.`;
+
+    });
 
 
-    try {
+/* =========================================
+   19. IMAGE ERROR PROTECTION
+========================================= */
 
-        await deleteDoc(
-            doc(
-                db,
-                "complaints",
-                id
-            )
+document
+    .querySelectorAll("img")
+    .forEach(img => {
+
+        img.addEventListener(
+            "error",
+            () => {
+
+                img.style.display =
+                    "none";
+
+            }
         );
 
-
-    } catch (error) {
-
-        console.error(
-            "Delete complaint error:",
-            error
-        );
+    });
 
 
-        alert(
-            "Шикоятро нест карда нашуд."
-        );
+/* =========================================
+   20. PAGE READY
+========================================= */
 
-    }
-
-}
-
-
-// =====================================
-// START
-// =====================================
-
-loadProjects();
+document.body.classList.add(
+    "js-ready"
+);
 
 console.log(
-    "MANUCHEKHR WEBSITE READY ✅"
+    "MANUCHEKHR SMM — Website Ready 🚀"
 );
