@@ -3840,4 +3840,1044 @@ div[style*="ПРОЕКТҲО"]:hover {
 .success-modal {
     background: rgba(10,8,14,.96);
 }
+/* =========================================================
+   MANUCHEKHR — ADMIN PANEL
+   PREMIUM / LUXURY / MOBILE
+========================================================= */
+
+:root {
+    --admin-bg: #050507;
+    --admin-card: #0b0a0f;
+    --admin-card-2: #100d16;
+    --admin-border: rgba(255,255,255,.09);
+    --admin-purple: #a855f7;
+    --admin-purple-light: #c084fc;
+    --admin-pink: #ec4899;
+    --admin-text: #ffffff;
+    --admin-muted: #77717f;
+}
+
+
+/* =========================================================
+   ADMIN BACKGROUND
+========================================================= */
+
+#adminModal {
+    background:
+        radial-gradient(
+            circle at 15% 10%,
+            rgba(124,58,237,.14),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 90% 20%,
+            rgba(236,72,153,.08),
+            transparent 25%
+        ),
+        #050507 !important;
+
+    backdrop-filter: blur(25px);
+
+    overflow-y: auto;
+}
+
+
+/* =========================================================
+   ADMIN CONTAINER
+========================================================= */
+
+#adminModal > div {
+    position: relative;
+
+    width: min(1180px, 94%) !important;
+
+    margin: 30px auto;
+
+    padding: 28px !important;
+
+    border:
+        1px solid var(--admin-border) !important;
+
+    border-radius: 30px !important;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(18,15,24,.97),
+            rgba(5,5,7,.98)
+        ) !important;
+
+    box-shadow:
+        0 40px 120px rgba(0,0,0,.65),
+        0 0 80px rgba(124,58,237,.06);
+
+    animation:
+        adminOpen .55s cubic-bezier(.2,.8,.2,1);
+}
+
+@keyframes adminOpen {
+
+    from {
+        opacity: 0;
+        transform:
+            translateY(30px)
+            scale(.97);
+    }
+
+    to {
+        opacity: 1;
+        transform:
+            translateY(0)
+            scale(1);
+    }
+
+}
+
+
+/* =========================================================
+   ADMIN HEADER
+========================================================= */
+
+#adminModal h1,
+#adminModal h2,
+#adminModal h3 {
+    color: #fff;
+}
+
+#adminModal h1 {
+
+    font-size: clamp(
+        28px,
+        5vw,
+        52px
+    ) !important;
+
+    letter-spacing: -.06em;
+
+    background:
+        linear-gradient(
+            100deg,
+            #fff 20%,
+            #d8b4fe 55%,
+            #ec4899
+        );
+
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    -webkit-text-fill-color:
+        transparent;
+}
+
+
+/* =========================================================
+   STATISTICS
+========================================================= */
+
+.admin-stats {
+
+    display:
+        grid !important;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 16px;
+
+    margin:
+        25px 0;
+}
+
+
+.stat-card {
+
+    position: relative;
+
+    overflow: hidden;
+
+    min-height: 170px;
+
+    padding: 25px !important;
+
+    border:
+        1px solid var(--admin-border) !important;
+
+    border-radius: 24px !important;
+
+    background:
+        linear-gradient(
+            145deg,
+            #15111d,
+            #08070b
+        ) !important;
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,.35);
+
+    transition:
+        transform .4s ease,
+        border .4s ease,
+        box-shadow .4s ease;
+}
+
+
+.stat-card::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 170px;
+    height: 170px;
+
+    right: -90px;
+    top: -90px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(168,85,247,.18),
+            transparent 70%
+        );
+
+    pointer-events: none;
+}
+
+
+.stat-card:hover {
+
+    transform:
+        translateY(-7px);
+
+    border-color:
+        rgba(192,132,252,.3) !important;
+
+    box-shadow:
+        0 30px 80px rgba(0,0,0,.45),
+        0 0 35px rgba(168,85,247,.05);
+}
+
+
+.stat-card span {
+
+    display: block;
+
+    color:
+        #77717f;
+
+    font-size: 9px;
+
+    letter-spacing: .17em;
+
+    font-weight: 600;
+}
+
+
+.stat-card strong {
+
+    display: block;
+
+    margin-top: 22px;
+
+    color: #fff;
+
+    font-size: 55px;
+
+    line-height: .9;
+
+    letter-spacing: -.06em;
+}
+
+
+.stat-card:nth-child(2) strong {
+
+    color:
+        #b56cff;
+
+    text-shadow:
+        0 0 25px
+        rgba(168,85,247,.25);
+}
+
+
+.stat-card small {
+
+    display: block;
+
+    margin-top: 18px;
+
+    color:
+        #5f5967;
+
+    font-size: 9px;
+}
+
+
+/* =========================================================
+   CLIENT REQUESTS
+========================================================= */
+
+.admin-requests {
+
+    position: relative;
+
+    overflow: hidden;
+
+    margin-top: 20px;
+
+    padding: 28px;
+
+    border:
+        1px solid var(--admin-border);
+
+    border-radius: 28px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(18,15,24,.8),
+            rgba(7,7,10,.9)
+        );
+
+    box-shadow:
+        0 30px 90px rgba(0,0,0,.35);
+}
+
+
+.admin-requests::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 260px;
+    height: 260px;
+
+    right: -130px;
+    top: -130px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(168,85,247,.1),
+            transparent 70%
+        );
+
+    pointer-events: none;
+}
+
+
+.admin-requests-title {
+
+    position: relative;
+    z-index: 1;
+
+    color:
+        #b56cff;
+
+    font-size: 9px;
+
+    letter-spacing: .25em;
+
+    font-weight: 700;
+}
+
+
+.admin-requests h2 {
+
+    position: relative;
+    z-index: 1;
+
+    margin:
+        10px 0 25px;
+
+    color: #fff;
+
+    font-size:
+        clamp(
+            32px,
+            5vw,
+            55px
+        );
+
+    line-height: .95;
+
+    letter-spacing:
+        -.06em;
+}
+
+
+/* =========================================================
+   REQUEST LIST
+========================================================= */
+
+#complaintList {
+
+    position: relative;
+    z-index: 2;
+
+    display:
+        grid;
+
+    gap: 13px;
+}
+
+
+.complaint-item {
+
+    position: relative;
+
+    overflow: hidden;
+
+    padding: 21px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.075);
+
+    border-radius: 20px;
+
+    background:
+        rgba(255,255,255,.025);
+
+    transition:
+        transform .35s ease,
+        border .35s ease,
+        background .35s ease,
+        box-shadow .35s ease;
+}
+
+
+.complaint-item::before {
+
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+    bottom: 0;
+
+    width: 2px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #7c3aed,
+            #ec4899
+        );
+
+    opacity: 0;
+
+    transition: .35s;
+}
+
+
+.complaint-item:hover {
+
+    transform:
+        translateY(-4px)
+        translateX(2px);
+
+    border-color:
+        rgba(192,132,252,.28);
+
+    background:
+        rgba(168,85,247,.035);
+
+    box-shadow:
+        0 20px 55px rgba(0,0,0,.3);
+}
+
+
+.complaint-item:hover::before {
+
+    opacity: 1;
+}
+
+
+/* =========================================================
+   REQUEST TOP
+========================================================= */
+
+.request-top {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap: 15px;
+}
+
+
+.complaint-name {
+
+    color:
+        #fff;
+
+    font-size:
+        17px;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        -.02em;
+}
+
+
+.complaint-phone {
+
+    margin-top:
+        5px;
+
+    color:
+        #b56cff;
+
+    font-size:
+        10px;
+}
+
+
+/* =========================================================
+   NEW BADGE
+========================================================= */
+
+.new-label {
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    padding:
+        6px 10px;
+
+    border:
+        1px solid
+        rgba(168,85,247,.28);
+
+    border-radius:
+        999px;
+
+    background:
+        rgba(168,85,247,.1);
+
+    color:
+        #c084fc;
+
+    font-size:
+        8px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        .1em;
+
+    box-shadow:
+        0 0 20px
+        rgba(168,85,247,.08);
+}
+
+
+/* =========================================================
+   MESSAGE
+========================================================= */
+
+.complaint-text {
+
+    margin-top:
+        15px;
+
+    padding:
+        15px 16px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.04);
+
+    border-radius:
+        14px;
+
+    background:
+        rgba(0,0,0,.25);
+
+    color:
+        #aaa4b1;
+
+    font-size:
+        12px;
+
+    line-height:
+        1.75;
+
+    white-space:
+        pre-wrap;
+
+    word-break:
+        break-word;
+}
+
+
+/* =========================================================
+   DATE
+========================================================= */
+
+.complaint-date {
+
+    display:
+        block;
+
+    margin-top:
+        12px;
+
+    color:
+        #5f5967;
+
+    font-size:
+        8px;
+}
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.complaint-buttons {
+
+    display:
+        flex;
+
+    flex-wrap:
+        wrap;
+
+    gap:
+        8px;
+
+    margin-top:
+        15px;
+}
+
+
+.complaint-buttons button {
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+
+    border-radius:
+        11px;
+
+    padding:
+        10px 14px;
+
+    font-size:
+        9px;
+
+    font-weight:
+        700;
+
+    cursor:
+        pointer;
+
+    transition:
+        transform .3s ease,
+        box-shadow .3s ease,
+        background .3s ease;
+}
+
+
+.complaint-buttons button:hover {
+
+    transform:
+        translateY(-2px);
+}
+
+
+.read-btn {
+
+    background:
+        linear-gradient(
+            135deg,
+            #7c3aed,
+            #a855f7
+        );
+
+    color:
+        #fff;
+
+    box-shadow:
+        0 8px 25px
+        rgba(168,85,247,.15);
+}
+
+
+.read-btn:hover {
+
+    box-shadow:
+        0 12px 35px
+        rgba(168,85,247,.28);
+}
+
+
+.delete-btn {
+
+    background:
+        rgba(239,68,68,.06);
+
+    color:
+        #f87171;
+
+    border-color:
+        rgba(239,68,68,.18) !important;
+}
+
+
+.delete-btn:hover {
+
+    background:
+        rgba(239,68,68,.13);
+
+    box-shadow:
+        0 8px 25px
+        rgba(239,68,68,.08);
+}
+
+
+.read-status {
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    padding:
+        8px 11px;
+
+    border-radius:
+        10px;
+
+    background:
+        rgba(255,255,255,.03);
+
+    color:
+        #6f6977;
+
+    font-size:
+        8px;
+
+    letter-spacing:
+        .04em;
+}
+
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.empty-message {
+
+    padding:
+        45px 20px;
+
+    text-align:
+        center;
+
+    border:
+        1px dashed
+        rgba(255,255,255,.08);
+
+    border-radius:
+        18px;
+
+    color:
+        #625d69;
+
+    font-size:
+        11px;
+}
+
+
+/* =========================================================
+   ADMIN INPUTS
+========================================================= */
+
+#adminModal input,
+#adminModal textarea,
+#adminModal select {
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+
+    border-radius:
+        13px;
+
+    background:
+        rgba(255,255,255,.025);
+
+    color:
+        #fff;
+
+    outline:
+        none;
+
+    transition:
+        .3s ease;
+}
+
+
+#adminModal input:focus,
+#adminModal textarea:focus,
+#adminModal select:focus {
+
+    border-color:
+        rgba(168,85,247,.5);
+
+    box-shadow:
+        0 0 0 4px
+        rgba(168,85,247,.06);
+
+    background:
+        rgba(168,85,247,.025);
+}
+
+
+/* =========================================================
+   ADMIN BUTTONS
+========================================================= */
+
+#adminModal button {
+
+    transition:
+        transform .3s ease,
+        box-shadow .3s ease,
+        border .3s ease;
+}
+
+
+#adminModal button:hover {
+
+    transform:
+        translateY(-2px);
+}
+
+
+#adminModal button:active {
+
+    transform:
+        scale(.97);
+}
+
+
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+
+#adminModal::-webkit-scrollbar {
+
+    width:
+        6px;
+}
+
+
+#adminModal::-webkit-scrollbar-track {
+
+    background:
+        #050507;
+}
+
+
+#adminModal::-webkit-scrollbar-thumb {
+
+    border-radius:
+        20px;
+
+    background:
+        linear-gradient(
+            #7c3aed,
+            #ec4899
+        );
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+
+    #adminModal {
+        padding:
+            10px !important;
+    }
+
+
+    #adminModal > div {
+
+        width:
+            calc(100% - 12px) !important;
+
+        margin:
+            10px auto;
+
+        padding:
+            18px !important;
+
+        border-radius:
+            24px !important;
+    }
+
+
+    .admin-stats {
+
+        grid-template-columns:
+            1fr !important;
+
+        gap:
+            10px;
+    }
+
+
+    .stat-card {
+
+        min-height:
+            135px;
+
+        padding:
+            20px !important;
+
+        border-radius:
+            21px !important;
+    }
+
+
+    .stat-card strong {
+
+        font-size:
+            43px;
+    }
+
+
+    .admin-requests {
+
+        padding:
+            20px;
+
+        border-radius:
+            23px;
+    }
+
+
+    .admin-requests h2 {
+
+        font-size:
+            31px;
+
+        line-height:
+            .98;
+    }
+
+
+    .complaint-item {
+
+        padding:
+            16px;
+
+        border-radius:
+            18px;
+    }
+
+
+    .complaint-name {
+
+        font-size:
+            15px;
+    }
+
+
+    .complaint-text {
+
+        font-size:
+            11px;
+
+        padding:
+            13px;
+    }
+
+
+    .complaint-buttons {
+
+        display:
+            grid;
+
+        grid-template-columns:
+            1fr 1fr;
+    }
+
+
+    .complaint-buttons button {
+
+        width:
+            100%;
+
+        padding:
+            11px 8px;
+
+        font-size:
+            8px;
+    }
+
+}
+
+
+/* =========================================================
+   SMALL PHONE
+========================================================= */
+
+@media (max-width: 390px) {
+
+    .admin-requests h2 {
+
+        font-size:
+            27px;
+    }
+
+
+    .stat-card {
+
+        min-height:
+            125px;
+    }
+
+
+    .stat-card strong {
+
+        font-size:
+            39px;
+    }
+
+
+    .complaint-buttons {
+
+        grid-template-columns:
+            1fr;
+    }
+
+}
 }
