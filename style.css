@@ -789,6 +789,29 @@ MOBILE
   .portfolio-card h3{
     font-size:36px;
   }
+  .admin-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 30px auto;
+    padding: 14px 28px;
+    border: 1px solid rgba(190, 110, 255, .45);
+    border-radius: 999px;
+    background: rgba(20, 10, 30, .75);
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    box-shadow: 0 0 30px rgba(170, 70, 255, .12);
+    transition: .3s ease;
+}
+
+.admin-link:hover {
+    transform: translateY(-3px);
+    border-color: #b45cff;
+    box-shadow: 0 0 35px rgba(170, 70, 255, .35);
+}
 
   footer{
     flex-direction:column;
