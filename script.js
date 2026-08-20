@@ -1,22 +1,3 @@
-/* =========================================================
-   MANUCHEKHR SMM
-   FIREBASE + CLIENT REQUESTS
-   ========================================================= */
-
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-app.js";
-
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  serverTimestamp
-} from "https://www.gstatic.com/firebasejs/12.17.0/firebase-firestore.js";
-
-
-/* =========================================================
-   01. FIREBASE CONFIG
-   ========================================================= */
-
 const firebaseConfig = {
   apiKey: "AIzaSyAteF9GeUK8RyKohaiBy_K7dsLix4Z0Sho",
   authDomain: "manuchekhr-smm.firebaseapp.com",
@@ -27,154 +8,79 @@ const firebaseConfig = {
   measurementId: "G-39DX3S5VS4"
 };
 
+firebase.initializeApp(firebaseConfig);
 
-/* =========================================================
-   02. INITIALIZE FIREBASE
-   ========================================================= */
+const db = firebase.firestore();
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+document.addEventListener("DOMContentLoaded", () => {
 
+  const forms = document.querySelectorAll("form");
 
-/* =========================================================
-   03. FIND CONTACT FORM
-   ========================================================= */
+  forms.forEach((form) => {
 
-const form =
-  document.querySelector("#contactForm") ||
-  document.querySelector("form");
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
 
-if (form) {
+      const name =
+        form.querySelector('[name="name"]')?.value.trim() ||
+        form.querySelector('input[type="text"]')?.value.trim() ||
+        "";
 
-  form.addEventListener("submit", async function (event) {
+      const phone =
+        form.querySelector('[name="phone"]')?.value.trim() ||
+        form.querySelector('input[type="tel"]')?.value.trim() ||
+        "";
 
-    event.preventDefault();
+      const message =
+        form.querySelector('[name="message"]')?.value.trim() ||
+        form.querySelector("textarea")?.value.trim() ||
+        "";
 
+      if (!name || !phone || !message) {
+        alert("Лутфан ҳамаи майдонҳоро пур кунед.");
+        return;
+      }
 
-    /* -----------------------------------------------------
-       GET INPUTS
-       ----------------------------------------------------- */
-
-    const nameInput =
-      form.querySelector('[name="name"]') ||
-      form.querySelector("#name");
-
-    const phoneInput =
-      form.querySelector('[name="phone"]') ||
-      form.querySelector("#phone");
-
-    const messageInput =
-      form.querySelector('[name="message"]') ||
-      form.querySelector("#message");
-
-
-    const name = nameInput?.value.trim() || "";
-    const phone = phoneInput?.value.trim() || "";
-    const message = messageInput?.value.trim() || "";
-
-
-    /* -----------------------------------------------------
-       VALIDATION
-       ----------------------------------------------------- */
-
-    if (!name || !phone || !message) {
-
-      alert("Лутфан ҳамаи майдонҳоро пур кунед.");
-
-      return;
-    }
-
-
-    /* -----------------------------------------------------
-       BUTTON
-       ----------------------------------------------------- */
-
-    const button = form.querySelector(
-      'button[type="submit"], input[type="submit"]'
-    );
-
-    const oldButtonText = button
-      ? button.textContent
-      : "";
-
-
-    if (button) {
-
-      button.disabled = true;
-      button.textContent = "Фиристода мешавад...";
-    }
-
-
-    /* -----------------------------------------------------
-       SAVE TO FIRESTORE
-       ----------------------------------------------------- */
-
-    try {
-
-      await addDoc(collection(db, "complaints"), {
-
-        name: name,
-
-        phone: phone,
-
-        message: message,
-
-        status: "new",
-
-        createdAt: serverTimestamp(),
-
-        source: "MANUCHEKHR SMM",
-
-        page: window.location.href
-
-      });
-
-
-      /* ---------------------------------------------------
-         SUCCESS
-         --------------------------------------------------- */
-
-      alert(
-        "Дархости шумо қабул шуд!\nМо ба шумо тамос мегирем."
-      );
-
-
-      form.reset();
-
-
-    } catch (error) {
-
-      console.error(
-        "Firebase error:",
-        error
-      );
-
-
-      alert(
-        "Хато шуд. Интернет ё танзимоти Firebase-ро санҷед."
-      );
-
-
-    } finally {
+      const button = form.querySelector('button[type="submit"]');
 
       if (button) {
+        button.disabled = true;
+        button.textContent = "Фиристода мешавад...";
+      }
 
-        button.disabled = false;
-        button.textContent = oldButtonText || "Фиристодан";
+      try {
+
+        await db.collection("complaints").add({
+          name: name,
+          phone: phone,
+          message: message,
+          status: "new",
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        form.reset();
+
+        alert("Дархост бо муваффақият фиристода шуд!");
+
+      } catch (error) {
+
+        console.error("Firebase error:", error);
+
+        alert(
+          "Хато шуд. Firebase ё Firestore-ро санҷед."
+        );
+
+      } finally {
+
+        if (button) {
+          button.disabled = false;
+          button.textContent = "Фиристодан";
+        }
 
       }
 
-    }
+    });
 
   });
 
-}
-
-
-/* =========================================================
-   04. READY
-   ========================================================= */
-
-console.log(
-  "MANUCHEKHR SMM — Firebase connected successfully."
-);
+});
