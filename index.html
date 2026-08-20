@@ -2901,7 +2901,1248 @@
     ====================================================== -->
 
     <script src="script.js"></script>
+<!-- =====================================================
+     MANUCHEKHR — ADMIN PANEL
+     ПЕШ АЗ </body> МОН
+===================================================== -->
 
+<!-- ADMIN BUTTON -->
+<button
+    id="openAdmin"
+    type="button"
+    style="
+        position:fixed;
+        right:18px;
+        bottom:18px;
+        z-index:9990;
+        padding:12px 18px;
+        border:1px solid rgba(255,255,255,.14);
+        border-radius:50px;
+        background:rgba(10,8,14,.82);
+        color:#fff;
+        backdrop-filter:blur(15px);
+        cursor:pointer;
+    "
+>
+    ⚙ Admin
+</button>
+
+
+<!-- ADMIN LOGIN -->
+<div
+    id="adminLogin"
+    style="
+        display:none;
+        position:fixed;
+        inset:0;
+        z-index:99999;
+        place-items:center;
+        padding:20px;
+        background:rgba(0,0,0,.82);
+        backdrop-filter:blur(20px);
+    "
+>
+
+    <div
+        style="
+            width:min(420px,100%);
+            padding:32px;
+            border:1px solid rgba(255,255,255,.12);
+            border-radius:28px;
+            background:#0d0a12;
+            box-shadow:0 40px 120px rgba(0,0,0,.7);
+        "
+    >
+
+        <button
+            id="closeAdminLogin"
+            type="button"
+            style="
+                float:right;
+                border:0;
+                background:none;
+                color:#888;
+                font-size:25px;
+                cursor:pointer;
+            "
+        >
+            ×
+        </button>
+
+        <small
+            style="
+                color:#a855f7;
+                letter-spacing:.2em;
+                font-size:8px;
+            "
+        >
+            ADMIN PANEL
+        </small>
+
+        <h2 style="margin:15px 0 8px;">
+            Воридшавӣ
+        </h2>
+
+        <p
+            style="
+                color:#777;
+                font-size:10px;
+                line-height:1.7;
+                margin-bottom:20px;
+            "
+        >
+            Барои кушодани панели идоракунӣ паролро ворид кунед.
+        </p>
+
+        <input
+            id="adminPassword"
+            type="password"
+            placeholder="Парол"
+            style="
+                width:100%;
+                padding:14px;
+                border:1px solid rgba(255,255,255,.1);
+                border-radius:13px;
+                outline:none;
+                background:#070609;
+                color:#fff;
+                margin-bottom:10px;
+            "
+        >
+
+        <button
+            id="adminLoginBtn"
+            type="button"
+            style="
+                width:100%;
+                padding:14px;
+                border:0;
+                border-radius:13px;
+                background:linear-gradient(120deg,#7c3aed,#a855f7,#ec4899);
+                color:white;
+                font-weight:700;
+                cursor:pointer;
+            "
+        >
+            Ворид шудан →
+        </button>
+
+        <p
+            id="adminLoginError"
+            style="
+                color:#f87171;
+                font-size:9px;
+                margin-top:10px;
+            "
+        ></p>
+
+    </div>
+
+</div>
+
+
+<!-- ADMIN DASHBOARD -->
+<div
+    id="adminDashboard"
+    style="
+        display:none;
+        position:fixed;
+        inset:0;
+        z-index:99998;
+        overflow:auto;
+        padding:30px 15px;
+        background:
+            radial-gradient(
+                circle at 10% 0,
+                rgba(124,58,237,.15),
+                transparent 30%
+            ),
+            #050507;
+        color:white;
+    "
+>
+
+    <div
+        style="
+            width:min(1100px,100%);
+            margin:auto;
+        "
+    >
+
+        <!-- HEADER -->
+
+        <div
+            style="
+                display:flex;
+                align-items:center;
+                justify-content:space-between;
+                gap:15px;
+                margin-bottom:30px;
+            "
+        >
+
+            <div>
+
+                <div
+                    style="
+                        font-weight:800;
+                        letter-spacing:.13em;
+                    "
+                >
+                    MANUCHEKHR<span
+                        style="color:#c084fc;"
+                    >.</span>
+                </div>
+
+                <small
+                    style="
+                        color:#666;
+                        font-size:8px;
+                        letter-spacing:.2em;
+                    "
+                >
+                    ADMIN DASHBOARD
+                </small>
+
+            </div>
+
+            <div style="display:flex;gap:8px;">
+
+                <button
+                    id="adminRefresh"
+                    type="button"
+                    style="
+                        padding:10px 15px;
+                        border:1px solid rgba(255,255,255,.1);
+                        border-radius:12px;
+                        background:rgba(255,255,255,.04);
+                        color:#ddd;
+                        cursor:pointer;
+                    "
+                >
+                    ↻ Навсозӣ
+                </button>
+
+                <button
+                    id="adminLogout"
+                    type="button"
+                    style="
+                        padding:10px 15px;
+                        border:1px solid rgba(248,113,113,.2);
+                        border-radius:12px;
+                        background:rgba(248,113,113,.06);
+                        color:#f87171;
+                        cursor:pointer;
+                    "
+                >
+                    Баромадан
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- STATISTICS -->
+
+        <div
+            style="
+                display:grid;
+                grid-template-columns:
+                    repeat(3,1fr);
+                gap:12px;
+                margin-bottom:15px;
+            "
+        >
+
+            <div
+                style="
+                    padding:22px;
+                    border:1px solid rgba(255,255,255,.08);
+                    border-radius:20px;
+                    background:rgba(255,255,255,.025);
+                "
+            >
+                <small
+                    style="color:#777;font-size:8px;"
+                >
+                    ҲАМАИ ДАРХОСТҲО
+                </small>
+
+                <strong
+                    id="adminTotal"
+                    style="
+                        display:block;
+                        margin-top:8px;
+                        font-size:32px;
+                    "
+                >
+                    0
+                </strong>
+            </div>
+
+
+            <div
+                style="
+                    padding:22px;
+                    border:1px solid rgba(255,255,255,.08);
+                    border-radius:20px;
+                    background:rgba(255,255,255,.025);
+                "
+            >
+                <small
+                    style="color:#777;font-size:8px;"
+                >
+                    ХОНДА НАШУДА
+                </small>
+
+                <strong
+                    id="adminUnread"
+                    style="
+                        display:block;
+                        margin-top:8px;
+                        font-size:32px;
+                        color:#c084fc;
+                    "
+                >
+                    0
+                </strong>
+            </div>
+
+
+            <div
+                style="
+                    padding:22px;
+                    border:1px solid rgba(255,255,255,.08);
+                    border-radius:20px;
+                    background:rgba(255,255,255,.025);
+                "
+            >
+                <small
+                    style="color:#777;font-size:8px;"
+                >
+                    ПРОЕКТҲО
+                </small>
+
+                <strong
+                    id="adminProjectsCount"
+                    style="
+                        display:block;
+                        margin-top:8px;
+                        font-size:32px;
+                    "
+                >
+                    0
+                </strong>
+            </div>
+
+        </div>
+
+
+        <!-- CLIENT MESSAGES -->
+
+        <section
+            style="
+                padding:25px;
+                border:1px solid rgba(255,255,255,.08);
+                border-radius:25px;
+                background:rgba(255,255,255,.025);
+                margin-bottom:15px;
+            "
+        >
+
+            <small
+                style="
+                    color:#a855f7;
+                    font-size:8px;
+                    letter-spacing:.2em;
+                "
+            >
+                CLIENT REQUESTS
+            </small>
+
+            <h2 style="margin:8px 0 22px;">
+                Паёмҳои клиентҳо
+            </h2>
+
+            <div id="adminMessages">
+
+                <p
+                    style="
+                        color:#666;
+                        font-size:10px;
+                    "
+                >
+                    Ҳоло паём нест.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- PORTFOLIO -->
+
+        <section
+            style="
+                padding:25px;
+                border:1px solid rgba(255,255,255,.08);
+                border-radius:25px;
+                background:rgba(255,255,255,.025);
+            "
+        >
+
+            <small
+                style="
+                    color:#a855f7;
+                    font-size:8px;
+                    letter-spacing:.2em;
+                "
+            >
+                PORTFOLIO
+            </small>
+
+            <h2 style="margin:8px 0 22px;">
+                Идоракунии проектҳо
+            </h2>
+
+            <div
+                style="
+                    display:grid;
+                    grid-template-columns:
+                        1fr 1fr;
+                    gap:8px;
+                "
+            >
+
+                <input
+                    id="adminProjectName"
+                    placeholder="Номи проект"
+                    style="
+                        padding:13px;
+                        border:1px solid rgba(255,255,255,.1);
+                        border-radius:12px;
+                        background:#08070b;
+                        color:white;
+                        outline:none;
+                    "
+                >
+
+                <input
+                    id="adminProjectType"
+                    placeholder="Хизмат / соҳа"
+                    style="
+                        padding:13px;
+                        border:1px solid rgba(255,255,255,.1);
+                        border-radius:12px;
+                        background:#08070b;
+                        color:white;
+                        outline:none;
+                    "
+                >
+
+            </div>
+
+            <input
+                id="adminProjectImage"
+                placeholder="Силкаи сурат"
+                style="
+                    width:100%;
+                    margin-top:8px;
+                    padding:13px;
+                    border:1px solid rgba(255,255,255,.1);
+                    border-radius:12px;
+                    background:#08070b;
+                    color:white;
+                    outline:none;
+                "
+            >
+
+            <button
+                id="adminAddProject"
+                type="button"
+                style="
+                    margin-top:8px;
+                    padding:13px 18px;
+                    border:0;
+                    border-radius:12px;
+                    background:linear-gradient(
+                        120deg,
+                        #7c3aed,
+                        #ec4899
+                    );
+                    color:white;
+                    font-weight:700;
+                    cursor:pointer;
+                "
+            >
+                + Илова кардани проект
+            </button>
+
+            <div
+                id="adminProjectList"
+                style="
+                    display:grid;
+                    grid-template-columns:
+                        repeat(3,1fr);
+                    gap:10px;
+                    margin-top:20px;
+                "
+            ></div>
+
+        </section>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     ADMIN JAVASCRIPT
+===================================================== -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const openAdmin =
+        document.getElementById("openAdmin");
+
+    const adminLogin =
+        document.getElementById("adminLogin");
+
+    const closeAdminLogin =
+        document.getElementById("closeAdminLogin");
+
+    const adminLoginBtn =
+        document.getElementById("adminLoginBtn");
+
+    const adminPassword =
+        document.getElementById("adminPassword");
+
+    const adminLoginError =
+        document.getElementById("adminLoginError");
+
+    const adminDashboard =
+        document.getElementById("adminDashboard");
+
+    const adminLogout =
+        document.getElementById("adminLogout");
+
+
+    /*
+       ⚠️ Ин танҳо frontend login аст.
+       Барои security-и ҳақиқӣ Firebase Auth истифода бар.
+    */
+
+    const ADMIN_PASSWORD =
+        "123456";
+
+
+    /* OPEN LOGIN */
+
+    openAdmin.addEventListener(
+        "click",
+        function () {
+
+            adminLogin.style.display =
+                "grid";
+
+            adminPassword.focus();
+
+        }
+    );
+
+
+    /* CLOSE LOGIN */
+
+    closeAdminLogin.addEventListener(
+        "click",
+        function () {
+
+            adminLogin.style.display =
+                "none";
+
+        }
+    );
+
+
+    /* LOGIN */
+
+    adminLoginBtn.addEventListener(
+        "click",
+        function () {
+
+            if (
+                adminPassword.value ===
+                ADMIN_PASSWORD
+            ) {
+
+                adminLogin.style.display =
+                    "none";
+
+                adminDashboard.style.display =
+                    "block";
+
+                document.body.style.overflow =
+                    "hidden";
+
+                loadAdminData();
+
+            } else {
+
+                adminLoginError.textContent =
+                    "Парол нодуруст аст.";
+
+                adminPassword.value = "";
+
+                adminPassword.focus();
+
+            }
+
+        }
+    );
+
+
+    /* ENTER */
+
+    adminPassword.addEventListener(
+        "keydown",
+        function (e) {
+
+            if (e.key === "Enter") {
+                adminLoginBtn.click();
+            }
+
+        }
+    );
+
+
+    /* LOGOUT */
+
+    adminLogout.addEventListener(
+        "click",
+        function () {
+
+            adminDashboard.style.display =
+                "none";
+
+            document.body.style.overflow =
+                "";
+
+            adminPassword.value = "";
+
+        }
+    );
+
+
+    /* REFRESH */
+
+    document
+        .getElementById("adminRefresh")
+        .addEventListener(
+            "click",
+            loadAdminData
+        );
+
+
+    /* LOAD */
+
+    function loadAdminData() {
+
+        /*
+           Ҳозир demo маълумот.
+           Вақте Firebase-ро пайваст мекунем,
+           ин қисм аз database мехонад.
+        */
+
+        const messages =
+            JSON.parse(
+                localStorage.getItem(
+                    "smm_messages"
+                ) || "[]"
+            );
+
+        const projects =
+            JSON.parse(
+                localStorage.getItem(
+                    "smm_projects"
+                ) || "[]"
+            );
+
+
+        document.getElementById(
+            "adminTotal"
+        ).textContent =
+            messages.length;
+
+
+        document.getElementById(
+            "adminUnread"
+        ).textContent =
+            messages.filter(
+                item => !item.read
+            ).length;
+
+
+        document.getElementById(
+            "adminProjectsCount"
+        ).textContent =
+            projects.length;
+
+
+        renderMessages(messages);
+
+        renderProjects(projects);
+
+    }
+
+
+    /* RENDER MESSAGES */
+
+    function renderMessages(messages) {
+
+        const box =
+            document.getElementById(
+                "adminMessages"
+            );
+
+
+        if (!messages.length) {
+
+            box.innerHTML = `
+                <p style="
+                    color:#666;
+                    font-size:10px;
+                ">
+                    Ҳоло ягон паёми клиент нест.
+                </p>
+            `;
+
+            return;
+        }
+
+
+        box.innerHTML =
+            messages.map(
+                function (item, index) {
+
+                    return `
+                        <article style="
+                            padding:18px;
+                            margin-bottom:9px;
+                            border:1px solid
+                                rgba(255,255,255,.08);
+                            border-radius:18px;
+                            background:
+                                rgba(255,255,255,.02);
+                        ">
+
+                            <div style="
+                                display:flex;
+                                justify-content:
+                                    space-between;
+                                gap:10px;
+                            ">
+
+                                <div>
+
+                                    <strong>
+                                        ${
+                                            escapeHTML(
+                                                item.name
+                                            )
+                                        }
+                                    </strong>
+
+                                    <div style="
+                                        color:#777;
+                                        font-size:9px;
+                                        margin-top:5px;
+                                    ">
+                                        ${
+                                            escapeHTML(
+                                                item.phone
+                                            )
+                                        }
+                                    </div>
+
+                                </div>
+
+                                <small style="
+                                    color:#666;
+                                ">
+                                    ${
+                                        escapeHTML(
+                                            item.date ||
+                                            ""
+                                        )
+                                    }
+                                </small>
+
+                            </div>
+
+
+                            <div style="
+                                display:flex;
+                                gap:15px;
+                                flex-wrap:wrap;
+                                margin:15px 0;
+                                color:#8c8495;
+                                font-size:9px;
+                            ">
+
+                                <span>
+                                    Бизнес:
+                                    ${
+                                        escapeHTML(
+                                            item.business ||
+                                            "—"
+                                        )
+                                    }
+                                </span>
+
+                                <span>
+                                    Тариф:
+                                    ${
+                                        escapeHTML(
+                                            item.plan ||
+                                            "—"
+                                        )
+                                    }
+                                </span>
+
+                            </div>
+
+
+                            <p style="
+                                color:#b8b0bd;
+                                font-size:10px;
+                                line-height:1.8;
+                            ">
+                                ${
+                                    escapeHTML(
+                                        item.message ||
+                                        ""
+                                    )
+                                }
+                            </p>
+
+
+                            <div style="
+                                display:flex;
+                                gap:7px;
+                                margin-top:15px;
+                            ">
+
+                                <button
+                                    type="button"
+                                    onclick="
+                                        markMessageRead(
+                                            ${index}
+                                        )
+                                    "
+                                    style="
+                                        padding:8px 12px;
+                                        border:1px solid
+                                            rgba(168,85,247,.2);
+                                        border-radius:10px;
+                                        background:
+                                            rgba(168,85,247,.07);
+                                        color:#c084fc;
+                                        cursor:pointer;
+                                    "
+                                >
+                                    ✓ Хонда шуд
+                                </button>
+
+
+                                <button
+                                    type="button"
+                                    onclick="
+                                        deleteMessage(
+                                            ${index}
+                                        )
+                                    "
+                                    style="
+                                        padding:8px 12px;
+                                        border:1px solid
+                                            rgba(248,113,113,.2);
+                                        border-radius:10px;
+                                        background:
+                                            rgba(248,113,113,.06);
+                                        color:#f87171;
+                                        cursor:pointer;
+                                    "
+                                >
+                                    Нест кардан
+                                </button>
+
+                            </div>
+
+                        </article>
+                    `;
+
+                }
+            ).join("");
+
+    }
+
+
+    /* READ MESSAGE */
+
+    window.markMessageRead =
+        function (index) {
+
+            const messages =
+                JSON.parse(
+                    localStorage.getItem(
+                        "smm_messages"
+                    ) || "[]"
+                );
+
+            if (messages[index]) {
+
+                messages[index].read =
+                    true;
+
+                localStorage.setItem(
+                    "smm_messages",
+                    JSON.stringify(messages)
+                );
+
+                loadAdminData();
+
+            }
+
+        };
+
+
+    /* DELETE MESSAGE */
+
+    window.deleteMessage =
+        function (index) {
+
+            if (
+                !confirm(
+                    "Ин паёмро нест кардан мехоҳед?"
+                )
+            ) {
+                return;
+            }
+
+            const messages =
+                JSON.parse(
+                    localStorage.getItem(
+                        "smm_messages"
+                    ) || "[]"
+                );
+
+            messages.splice(index, 1);
+
+            localStorage.setItem(
+                "smm_messages",
+                JSON.stringify(messages)
+            );
+
+            loadAdminData();
+
+        };
+
+
+    /* ADD PROJECT */
+
+    document
+        .getElementById("adminAddProject")
+        .addEventListener(
+            "click",
+            function () {
+
+                const name =
+                    document
+                        .getElementById(
+                            "adminProjectName"
+                        )
+                        .value
+                        .trim();
+
+                const type =
+                    document
+                        .getElementById(
+                            "adminProjectType"
+                        )
+                        .value
+                        .trim();
+
+                const image =
+                    document
+                        .getElementById(
+                            "adminProjectImage"
+                        )
+                        .value
+                        .trim();
+
+
+                if (!name || !type) {
+
+                    alert(
+                        "Номи проект ва хизматро пур кунед."
+                    );
+
+                    return;
+                }
+
+
+                const projects =
+                    JSON.parse(
+                        localStorage.getItem(
+                            "smm_projects"
+                        ) || "[]"
+                    );
+
+
+                projects.push({
+                    name: name,
+                    type: type,
+                    image: image
+                });
+
+
+                localStorage.setItem(
+                    "smm_projects",
+                    JSON.stringify(projects)
+                );
+
+
+                document
+                    .getElementById(
+                        "adminProjectName"
+                    )
+                    .value = "";
+
+                document
+                    .getElementById(
+                        "adminProjectType"
+                    )
+                    .value = "";
+
+                document
+                    .getElementById(
+                        "adminProjectImage"
+                    )
+                    .value = "";
+
+
+                loadAdminData();
+
+            }
+        );
+
+
+    /* PROJECTS */
+
+    function renderProjects(projects) {
+
+        const box =
+            document.getElementById(
+                "adminProjectList"
+            );
+
+
+        if (!projects.length) {
+
+            box.innerHTML = `
+                <p style="
+                    color:#666;
+                    font-size:10px;
+                ">
+                    Ҳоло проект нест.
+                </p>
+            `;
+
+            return;
+        }
+
+
+        box.innerHTML =
+            projects.map(
+                function (project, index) {
+
+                    return `
+                        <article style="
+                            padding:10px;
+                            border:1px solid
+                                rgba(255,255,255,.08);
+                            border-radius:16px;
+                            background:
+                                rgba(255,255,255,.025);
+                        ">
+
+                            ${
+                                project.image
+                                ?
+                                `
+                                <img
+                                    src="${
+                                        escapeAttribute(
+                                            project.image
+                                        )
+                                    }"
+                                    alt=""
+                                    style="
+                                        width:100%;
+                                        height:130px;
+                                        object-fit:cover;
+                                        border-radius:11px;
+                                        margin-bottom:10px;
+                                    "
+                                >
+                                `
+                                :
+                                `
+                                <div style="
+                                    height:130px;
+                                    display:grid;
+                                    place-items:center;
+                                    border-radius:11px;
+                                    margin-bottom:10px;
+                                    background:
+                                        linear-gradient(
+                                            135deg,
+                                            #7c3aed,
+                                            #ec4899
+                                        );
+                                    font-size:45px;
+                                    font-weight:800;
+                                ">
+                                    M
+                                </div>
+                                `
+                            }
+
+
+                            <strong style="
+                                display:block;
+                                font-size:11px;
+                            ">
+                                ${
+                                    escapeHTML(
+                                        project.name
+                                    )
+                                }
+                            </strong>
+
+                            <small style="
+                                display:block;
+                                color:#777;
+                                font-size:8px;
+                                margin:5px 0 10px;
+                            ">
+                                ${
+                                    escapeHTML(
+                                        project.type
+                                    )
+                                }
+                            </small>
+
+
+                            <button
+                                type="button"
+                                onclick="
+                                    deleteProject(
+                                        ${index}
+                                    )
+                                "
+                                style="
+                                    width:100%;
+                                    padding:8px;
+                                    border:1px solid
+                                        rgba(248,113,113,.2);
+                                    border-radius:9px;
+                                    background:
+                                        rgba(248,113,113,.05);
+                                    color:#f87171;
+                                    cursor:pointer;
+                                "
+                            >
+                                Нест кардан
+                            </button>
+
+                        </article>
+                    `;
+
+                }
+            ).join("");
+
+    }
+
+
+    /* DELETE PROJECT */
+
+    window.deleteProject =
+        function (index) {
+
+            if (
+                !confirm(
+                    "Ин проектро нест кардан мехоҳед?"
+                )
+            ) {
+                return;
+            }
+
+
+            const projects =
+                JSON.parse(
+                    localStorage.getItem(
+                        "smm_projects"
+                    ) || "[]"
+                );
+
+
+            projects.splice(index, 1);
+
+
+            localStorage.setItem(
+                "smm_projects",
+                JSON.stringify(projects)
+            );
+
+
+            loadAdminData();
+
+        };
+
+
+    /* SECURITY — HTML */
+
+    function escapeHTML(value) {
+
+        return String(value || "")
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#039;");
+
+    }
+
+
+    function escapeAttribute(value) {
+
+        return String(value || "")
+            .replaceAll('"', "&quot;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;");
+
+    }
+
+});
+
+</script>
+
+<!-- =====================================================
+     END ADMIN PANEL
+===================================================== -->
 </body>
 
 </html>
