@@ -11,12 +11,19 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 const db = firebase.firestore();
+const auth = firebase.auth();
 
 document.addEventListener("DOMContentLoaded", () => {
+
+  /* =========================
+     CLIENT FORM
+  ========================= */
 
   const forms = document.querySelectorAll("form");
 
   forms.forEach((form) => {
+
+    if (form.id === "loginForm") return;
 
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
@@ -66,9 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         console.error("Firebase error:", error);
 
-        alert(
-          "Хато шуд. Firebase ё Firestore-ро санҷед."
-        );
+        alert("Хато шуд. Firebase ё Firestore-ро санҷед.");
 
       } finally {
 
@@ -78,9 +83,53 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
       }
+    });
+  });
+
+
+  /* =========================
+     ADMIN LOGIN
+  ========================= */
+
+  const loginForm = document.getElementById("loginForm");
+
+  if (loginForm) {
+
+    loginForm.addEventListener("submit", async (event) => {
+
+      event.preventDefault();
+
+      const email =
+        document.getElementById("email").value.trim();
+
+      const password =
+        document.getElementById("password").value;
+
+      const loginError =
+        document.getElementById("loginError");
+
+      loginError.textContent = "";
+
+      try {
+
+        await auth.signInWithEmailAndPassword(
+          email,
+          password
+        );
+
+        window.location.href = "admin.html";
+
+      } catch (error) {
+
+        console.error("Login error:", error);
+
+        loginError.textContent =
+          "Email ё password нодуруст аст.";
+
+      }
 
     });
 
-  });
+  }
 
 });
